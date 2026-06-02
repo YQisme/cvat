@@ -40,6 +40,8 @@
     "cvat-canvas3d": "link:./../cvat-canvas3d",
     "cvat-core": "link:./../cvat-core",
     "dayjs": "^1.11.18",
+    "i18next": "^23.11.5",
+    "react-i18next": "^14.1.0",
     "dotenv-webpack": "^8.0.1",
     "error-stack-parser": "^2.0.6",
     "json-logic-js": "^2.0.2",

@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: MIT
 
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 import Form from 'antd/lib/form';
@@ -39,6 +40,7 @@ function LoginFormComponent(props: Props): JSX.Element {
         fetching, onSubmit, renderResetPassword, renderRegistrationComponent, renderBasicLoginComponent,
     } = props;
 
+    const { t } = useTranslation();
     const authQuery = useAuthQuery();
     const [form] = Form.useForm();
     const [credential, setCredential] = useState('');
@@ -58,7 +60,7 @@ function LoginFormComponent(props: Props): JSX.Element {
         <Col className='cvat-credentials-link'>
             <Text strong>
                 <Link to={{ pathname: '/auth/password/reset', search: resetSearch }}>
-                    Forgot password?
+                    {t('auth.forgotPassword')}
                 </Link>
             </Text>
         </Col>
@@ -85,13 +87,13 @@ function LoginFormComponent(props: Props): JSX.Element {
                         <Row>
                             <Col className='cvat-credentials-link'>
                                 <Text strong>
-                                    New user?&nbsp;
+                                    {t('auth.newUser')}&nbsp;
                                     <Link to={{
                                         pathname: '/auth/register',
                                         search: authQuery ? new URLSearchParams(authQuery).toString() : '',
                                     }}
                                     >
-                                        Create an account
+                                        {t('auth.createAccount')}
                                     </Link>
                                 </Text>
                             </Col>
@@ -103,7 +105,7 @@ function LoginFormComponent(props: Props): JSX.Element {
                 }
             </Row>
             <Col>
-                <Title level={2}> Sign in </Title>
+                <Title level={2}>{t('auth.signIn')}</Title>
             </Col>
             <Form
                 className={`cvat-login-form ${credential ? 'cvat-login-form-extended' : ''}`}
@@ -120,7 +122,7 @@ function LoginFormComponent(props: Props): JSX.Element {
                         >
                             <Input
                                 autoComplete='credential'
-                                prefix={<Text>Email or username</Text>}
+                                prefix={<Text>{t('auth.emailOrUsername')}</Text>}
                                 className={credential ? 'cvat-input-floating-label-above' : 'cvat-input-floating-label'}
                                 suffix={credential && (
                                     <Icon
@@ -146,14 +148,14 @@ function LoginFormComponent(props: Props): JSX.Element {
                                     rules={[
                                         {
                                             required: true,
-                                            message: 'Please specify a password',
+                                            message: t('auth.passwordRequired'),
                                         },
                                     ]}
                                 >
                                     <CVATSigningInput
                                         type={CVATInputType.PASSWORD}
                                         id='password'
-                                        placeholder='Password'
+                                        placeholder={t('auth.password')}
                                         autoComplete='password'
                                     />
                                 </Form.Item>
@@ -168,7 +170,7 @@ function LoginFormComponent(props: Props): JSX.Element {
                                         disabled={!credential}
                                         htmlType='submit'
                                     >
-                                        Next
+                                        {t('auth.next')}
                                     </Button>
                                 </Form.Item>
                             )

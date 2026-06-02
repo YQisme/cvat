@@ -1,0 +1,46 @@
+{
+  "header": {
+    "projects": "Projects",
+    "tasks": "Tasks",
+    "jobs": "Jobs",
+    "cloudStorages": "Cloud Storages",
+    "requests": "Requests",
+    "models": "Models",
+    "analytics": "Analytics",
+    "openRepository": "Click to open repository",
+    "openGuide": "Click to open guide",
+    "adminPage": "Admin page",
+    "profile": "Profile",
+    "organization": "Organization",
+    "settings": "Settings",
+    "organizationSettings": "Settings",
+    "invitations": "Invitations",
+    "create": "Create",
+    "switchOrganization": "Switch organization",
+    "personalWorkspace": "Personal workspace",
+    "about": "About",
+    "logout": "Logout",
+    "pressToSwitch": "Press {{shortcut}} to switch",
+    "whatsNew": "What's new?",
+    "mitLicense": "MIT License",
+    "findUsOnDiscord": "Find us on Discord",
+    "serverVersion": "Server version:",
+    "uiVersion": "UI version:",
+    "language": "Language"
+  },
+  "auth": {
+    "signIn": "Sign in",
+    "emailOrUsername": "Email or username",
+    "password": "Password",
+    "next": "Next",
+    "forgotPassword": "Forgot password?",
+    "newUser": "New user?",
+    "createAccount": "Create an account",
+    "passwordRequired": "Please specify a password"
+  },
+  "common": {
+    "languageZh": "中文",
+    "languageEn": "English",
+    "switchLanguage": "Switch language"
+  }
+}

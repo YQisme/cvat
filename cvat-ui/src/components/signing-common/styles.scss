@@ -44,6 +44,18 @@ $social-google-background: #4286f5;
     padding: $grid-unit-size * 2 0 0 0;
     width: 100%;
 
+    .cvat-signing-language-switcher {
+        position: absolute;
+        top: $grid-unit-size * 2;
+        right: $grid-unit-size * 3;
+        z-index: 1;
+
+        .cvat-language-switcher-button {
+            color: $heading-color;
+            font-size: 14px;
+        }
+    }
+
     .cvat-logo-icon {
         filter: brightness(0) invert(1);
     }
