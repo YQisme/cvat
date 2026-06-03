@@ -67,7 +67,8 @@ cd cvat
 # 可选：设置你的 IP 或域名
 # export CVAT_HOST=your-ip-or-domain
 
-docker compose up -d
+# 首次启动建议加 --build：cvat_ui 会从源码构建本地镜像（见下方「本地构建 UI 镜像」）
+docker compose up -d --build
 ```
 
 **2. 创建管理员账户**
@@ -88,9 +89,81 @@ docker exec -it cvat_server bash -ic 'python3 ~/manage.py createsuperuser'
 
 其他部署方式（AWS、Kubernetes、外部 PostgreSQL、备份、升级等），请参阅 [部署指南](https://docs.cvat.ai/docs/administration/community/advanced/)。
 
+### 本地构建 UI 镜像（Docker 部署）
+
+本仓库的 `docker-compose.yml` 中，`cvat_ui` 已配置为**从源码构建**前端镜像，而不是从 Docker Hub 拉取预构建的 `cvat/ui:dev`。构建逻辑见根目录 [`Dockerfile.ui`](Dockerfile.ui)（在 Node 中执行 `yarn run build:cvat-ui`，再将产物放入 nginx）。
+
+`cvat_ui` 相关配置如下：
+
+```yaml
+cvat_ui:
+  image: cvat/ui:${CVAT_VERSION:-dev}
+  build:
+    context: .
+    dockerfile: Dockerfile.ui
+```
+
+Compose 会将构建结果打上与 `image` 相同的标签（默认为 `cvat/ui:dev`）。后端服务 `cvat_server` 等仍使用镜像 `cvat/server:${CVAT_VERSION:-dev}`（默认从 registry 拉取）；若也需本地构建服务端，可叠加 [`docker-compose.dev.yml`](docker-compose.dev.yml)。
+
+**构建与启动**
+
+```bash
+cd cvat
+
+# 仅构建 UI 镜像
+docker compose build cvat_ui
+
+# 启动全栈（含刚构建的 UI）
+docker compose up -d
+
+# 或一步完成构建并启动 UI
+docker compose up -d --build cvat_ui
+```
+
+**修改前端后更新到 8080**
+
+在 `cvat-ui/` 或相关 workspace 中改完代码后，重新构建并重启 UI 容器：
+
+```bash
+docker compose build cvat_ui
+docker compose up -d cvat_ui
+```
+
+然后在浏览器打开 [http://localhost:8080](http://localhost:8080)（或你的 `CVAT_HOST`）验证。
+
+**可选：自定义镜像标签与构建参数**
+
+```bash
+# 使用自定义版本标签
+CVAT_VERSION=my-local docker compose build cvat_ui
+CVAT_VERSION=my-local docker compose up -d cvat_ui
+
+# 直接 docker build（效果与 compose build 相同，需手动打标签）
+docker build -f Dockerfile.ui -t cvat/ui:dev .
+```
+
+`Dockerfile.ui` 支持的构建参数示例：
+
+```bash
+docker compose build cvat_ui \
+  --build-arg SOURCE_MAPS_ENABLED=true
+# 或在 docker-compose.yml 的 build.args 中声明 CLIENT_PLUGINS、SOURCE_MAPS_ENABLED 等
+```
+
+**验证是否使用本地镜像**
+
+```bash
+docker images cvat/ui
+docker inspect cvat_ui --format '{{.Config.Image}}'
+```
+
+本地构建的镜像 `Created` 时间应为最近一次构建时间。
+
+> **与热更新开发的区别：** 本节适用于通过 Docker 在 **8080** 端口提供 UI（接近生产部署）。若需改一行代码就刷新界面，请使用下方 [前端开发（热更新）](#前端开发热更新) 工作流（**3000** 端口），无需每次 `docker compose build cvat_ui`。
+
 ### 前端开发（热更新）
 
-当你修改 `cvat-ui` 并希望在浏览器中**立即**看到效果、且无需每次重建 `cvat_ui` Docker 镜像时，使用此工作流。
+当你修改 `cvat-ui` 并希望在浏览器中**立即**看到效果、且无需每次重建 `cvat_ui` Docker 镜像时，使用此工作流。若要把改动打进 Docker 镜像并在 **8080** 访问，请参阅上方 [本地构建 UI 镜像（Docker 部署）](#本地构建-ui-镜像docker-部署)。
 
 **架构：** 后端用 Docker 运行，前端在本机启动 dev server。Webpack 在 **3000** 端口提供 UI 热更新，并将 API 请求代理到 Docker 后端的 **8080** 端口。
 
@@ -167,14 +240,15 @@ yarn run start:cvat-ui:docker        # 或使用上方自定义 API_URL 命令
 | `ECONNREFUSED localhost:7000` | 默认 `yarn run start:cvat-ui` 期望本机 Django 在 7000 端口 | 使用 `yarn run start:cvat-ui:docker`，或将 `API_URL` 设为 8080 端口 |
 | 8080 端口 API 返回 404 | `CVAT_HOST` 不是 `localhost` | 将 `API_URL` 设为 `http://<CVAT_HOST>:8080` |
 | UI 修改未生效 | 浏览器访问的是 8080（Docker UI） | 本地开发请使用 **3000** 端口 |
-| 重建很慢 | 每次改动都执行 `docker compose build cvat_ui` | 开发阶段使用 dev server；仅在部署时重建 UI 镜像 |
+| 重建很慢 | 每次改动都执行 `docker compose build cvat_ui` | 日常改 UI 用 dev server（3000）；仅验证 Docker 部署时再本地构建 UI（见 [本地构建 UI 镜像](#本地构建-ui-镜像docker-部署)） |
 
 **其他开发模式**
 
 | 模式 | 适用场景 | 访问地址 |
 | --- | --- | --- |
-| 本机 UI + Docker 后端（推荐，改前端） | 前端热更新 | `http://localhost:3000` |
-| Docker 全栈 | 验证部署、不改 UI | `http://localhost:8080`（或你的 `CVAT_HOST`） |
+| 本机 UI + Docker 后端（推荐，改前端） | 前端热更新，无需重建镜像 | `http://localhost:3000` |
+| Docker 全栈 + **本地构建 UI**（`docker-compose.yml`） | 验证 Docker 部署、使用自改前端打包进镜像 | `http://localhost:8080`（改 UI 后执行 `docker compose build cvat_ui && docker compose up -d cvat_ui`） |
+| Docker 全栈 + 预构建 UI | 不改 UI、使用 Hub 镜像（需去掉 `build` 段或 `docker compose pull`） | `http://localhost:8080` |
 | 本机 UI + 本机 Django 后端 | 全栈本地调试 | `yarn run start:cvat-ui`（API 在 7000 端口），见 [开发环境](https://docs.cvat.ai/docs/contributing/development-environment/) |
 
 UI 相关命令详见 [`cvat-ui/README.md`](cvat-ui/README.md)。
