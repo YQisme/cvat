@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: MIT
 
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Row, Col } from 'antd/lib/grid';
 import Checkbox, { CheckboxChangeEvent } from 'antd/lib/checkbox';
@@ -57,6 +58,7 @@ export default function PlayerSettingsComponent(props: Props): JSX.Element {
     } = props;
 
     const plugins = usePlugins((state) => state.plugins.components.settings.player, props);
+    const { t } = useTranslation();
 
     const minFrameStep = 2;
     const maxFrameStep = 1000;
@@ -65,7 +67,7 @@ export default function PlayerSettingsComponent(props: Props): JSX.Element {
     items.push([(
         <Row key='player-step' align='bottom' className='cvat-player-settings-step cvat-player-setting'>
             <Col>
-                <Text className='cvat-text-color'> Player step </Text>
+                <Text className='cvat-text-color'>{t('settings.playerStep')}</Text>
                 <InputNumber
                     min={minFrameStep}
                     max={maxFrameStep}
@@ -79,9 +81,9 @@ export default function PlayerSettingsComponent(props: Props): JSX.Element {
             </Col>
             <Col offset={1}>
                 <Text type='secondary'>
-                    Number of frames skipped when selecting
+                    {t('settings.playerStepHint')}
                     <Icon component={BackJumpIcon} />
-                    or
+                    {t('settings.or')}
                     <Icon component={ForwardJumpIcon} />
                 </Text>
             </Col>
@@ -91,7 +93,7 @@ export default function PlayerSettingsComponent(props: Props): JSX.Element {
     items.push([(
         <Row key='player-speed' align='middle' className='cvat-player-settings-speed cvat-player-setting'>
             <Col>
-                <Text className='cvat-text-color'> Player speed </Text>
+                <Text className='cvat-text-color'>{t('settings.playerSpeed')}</Text>
                 <Select
                     className='cvat-player-settings-speed-select'
                     value={frameSpeed}
@@ -179,7 +181,7 @@ export default function PlayerSettingsComponent(props: Props): JSX.Element {
                         </Checkbox>
                     </Col>
                     <Col span={24}>
-                        <Text type='secondary'> Fit image after changing frame </Text>
+                        <Text type='secondary'>{t('settings.fitImageAfterFrameChange')}</Text>
                     </Col>
                 </Row>
             </Col>
@@ -197,7 +199,7 @@ export default function PlayerSettingsComponent(props: Props): JSX.Element {
                         </Checkbox>
                     </Col>
                     <Col span={24}>
-                        <Text type='secondary'> Rotate all images simultaneously </Text>
+                        <Text type='secondary'>{t('settings.rotateAllImages')}</Text>
                     </Col>
                 </Row>
             </Col>
@@ -220,7 +222,7 @@ export default function PlayerSettingsComponent(props: Props): JSX.Element {
                         </Checkbox>
                     </Col>
                     <Col span={24}>
-                        <Text type='secondary'> Smooth image when zoom-in it </Text>
+                        <Text type='secondary'>{t('settings.smoothImageOnZoom')}</Text>
                     </Col>
                 </Row>
             </Col>
@@ -237,7 +239,7 @@ export default function PlayerSettingsComponent(props: Props): JSX.Element {
                     </Checkbox>
                 </Row>
                 <Row>
-                    <Text type='secondary'>You will be able to navigate and restore deleted frames</Text>
+                    <Text type='secondary'>{t('settings.deletedFramesHint')}</Text>
                 </Row>
             </Col>
         </Row>

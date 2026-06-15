@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: MIT
 
 import React, { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
 import { isEqual } from 'lodash';
 import { CombinedState } from 'reducers';
@@ -27,6 +28,7 @@ function UserInfoCard(): JSX.Element {
     const user = useSelector((state: CombinedState) => state.auth.user);
     const dispatch = useDispatch();
     const [form] = Form.useForm();
+    const { t } = useTranslation();
 
     const initialValues: ProfileFormValues = {
         username: user?.username,
@@ -67,7 +69,7 @@ function UserInfoCard(): JSX.Element {
     };
 
     return (
-        <Card title='Personal Information' className='cvat-profile-info-card'>
+        <Card title={t('profile.personalInformation')} className='cvat-profile-info-card'>
             <Form
                 form={form}
                 layout='vertical'
@@ -77,7 +79,7 @@ function UserInfoCard(): JSX.Element {
                 <Row gutter={16}>
                     <Col span={12}>
                         <Form.Item
-                            label='First Name'
+                            label={t('profile.firstName')}
                             name='firstName'
                             rules={validationRules.firstName}
                         >
@@ -86,7 +88,7 @@ function UserInfoCard(): JSX.Element {
                     </Col>
                     <Col span={12}>
                         <Form.Item
-                            label='Last Name'
+                            label={t('profile.lastName')}
                             name='lastName'
                             rules={validationRules.lastName}
                         >
@@ -95,14 +97,14 @@ function UserInfoCard(): JSX.Element {
                     </Col>
                 </Row>
                 <Form.Item
-                    label='Email'
+                    label={t('profile.email')}
                     name='email'
                     rules={validationRules.email}
                 >
                     <Input disabled />
                 </Form.Item>
                 <Form.Item
-                    label='Username'
+                    label={t('profile.username')}
                     name='username'
                     rules={validationRules.userName}
                 >
@@ -115,7 +117,7 @@ function UserInfoCard(): JSX.Element {
                             type='primary'
                             htmlType='submit'
                         >
-                            Save changes
+                            {t('profile.saveChanges')}
                         </Button>
                     </Row>
                 </Form.Item>

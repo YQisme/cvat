@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: MIT
 
 import React, { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { shallowEqual } from 'utils/redux';
 import { CombinedState } from 'reducers';
@@ -32,17 +33,18 @@ function ProfilePageComponent(): JSX.Element {
     }), shallowEqual);
 
     const [activeTab, setActiveTab] = useState(getTabFromHash(supportedTabs));
+    const { t } = useTranslation();
 
     const menuItems = [
         {
             key: 'profile',
             icon: <UserOutlined />,
-            label: <Text className='cvat-profile-page-menu-item-profile'>Profile</Text>,
+            label: <Text className='cvat-profile-page-menu-item-profile'>{t('profile.profile')}</Text>,
         },
         {
             key: 'security',
             icon: <LockOutlined />,
-            label: <Text className='cvat-profile-page-menu-item-security'>Security</Text>,
+            label: <Text className='cvat-profile-page-menu-item-security'>{t('profile.security')}</Text>,
         },
     ];
 
@@ -76,7 +78,7 @@ function ProfilePageComponent(): JSX.Element {
             <Row justify='center' align='middle'>
                 <Col {...dimensions}>
                     <Title level={1} className='cvat-profile-page-welcome'>
-                        {`Welcome, ${user?.username}`}
+                        {t('profile.welcome', { username: user?.username })}
                     </Title>
                 </Col>
             </Row>

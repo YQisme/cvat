@@ -5,6 +5,7 @@
 import './styles.scss';
 import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
 import { shallowEqual } from 'utils/redux';
 import { CombinedState } from 'reducers';
@@ -41,6 +42,7 @@ function OrganizationSelector(props: Props): JSX.Element {
 
     const [ref, inView] = useInView();
     const dispatch = useDispatch();
+    const { t } = useTranslation();
 
     useEffect(() => {
         if (fetching) {
@@ -82,14 +84,14 @@ function OrganizationSelector(props: Props): JSX.Element {
     return (
         <AutoComplete
             defaultValue={searchPhrase}
-            placeholder='Select an organization'
+            placeholder={t('common.selectOrganization')}
             showSearch
             onSearch={_.debounce(setSearchPhrase, 500)}
             options={[
                 ...(
                     (currentOrg) ? [{
                         value: '',
-                        label: 'Personal workspace',
+                        label: t('header.personalWorkspace'),
                     }] : []
                 ),
                 ...searchResults

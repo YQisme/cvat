@@ -5,6 +5,7 @@
 
 import './styles.scss';
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
 import { shallowEqual } from 'utils/redux';
 import Tabs from 'antd/lib/tabs';
@@ -34,6 +35,7 @@ function SettingsModal(props: SettingsModalProps): JSX.Element {
     }), shallowEqual);
     const [settingsInitialized, setSettingsInitialized] = useState(false);
     const dispatch = useDispatch();
+    const { t } = useTranslation();
 
     useEffect(() => {
         if (!settingsInitialized) return;
@@ -46,7 +48,7 @@ function SettingsModal(props: SettingsModalProps): JSX.Element {
             dispatch(restoreSettingsAsync());
         } catch {
             notification.error({
-                message: 'Failed to load settings from local storage',
+                message: t('settings.loadFailed'),
                 className: 'cvat-notification-notice-load-settings-fail',
             });
         } finally {
@@ -57,19 +59,19 @@ function SettingsModal(props: SettingsModalProps): JSX.Element {
     const tabItems = [
         {
             key: 'player',
-            label: <Text>Player</Text>,
+            label: <Text>{t('settings.player')}</Text>,
             icon: <PlayCircleOutlined />,
             children: <PlayerSettingsContainer />,
         },
         {
             key: 'workspace',
-            label: <Text>Workspace</Text>,
+            label: <Text>{t('settings.workspace')}</Text>,
             icon: <LaptopOutlined />,
             children: <WorkspaceSettingsContainer />,
         },
         {
             key: 'shortcuts',
-            label: <Text>Shortcuts</Text>,
+            label: <Text>{t('settings.shortcuts')}</Text>,
             icon: <BuildOutlined />,
             children: <ShortcutsSettingsContainer />,
         },
@@ -77,14 +79,14 @@ function SettingsModal(props: SettingsModalProps): JSX.Element {
 
     return (
         <Modal
-            title='Settings'
+            title={t('settings.title')}
             open={visible}
             onCancel={onClose}
             width={800}
             className='cvat-settings-modal'
             footer={(
                 <Button className='cvat-close-settings-button' type='default' onClick={onClose}>
-                    Close
+                    {t('common.close')}
                 </Button>
             )}
         >

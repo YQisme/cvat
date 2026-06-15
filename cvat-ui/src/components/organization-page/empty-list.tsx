@@ -3,13 +3,16 @@
 // SPDX-License-Identifier: MIT
 
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import Text from 'antd/lib/typography/Text';
 import Empty from 'antd/lib/empty';
 
 function EmptyListComponent(): JSX.Element {
+    const { t } = useTranslation();
+
     return (
         <div className='cvat-empty-members-list'>
-            <Empty description={<Text strong>No results matched your search...</Text>} />
+            <Empty description={<Text strong>{t('empty.noSearchResults')}</Text>} />
         </div>
     );
 }

@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: MIT
 
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Row, Col } from 'antd/lib/grid';
 import { CloseOutlined, LoadingOutlined } from '@ant-design/icons';
 import Text from 'antd/lib/typography/Text';
@@ -21,6 +22,7 @@ interface Props {
 
 function AutomaticAnnotationProgress(props: Props): JSX.Element | null {
     const { activeInference, cancelAutoAnnotation } = props;
+    const { t } = useTranslation();
     if (!activeInference) {
         return null;
     }
@@ -42,7 +44,7 @@ function AutomaticAnnotationProgress(props: Props): JSX.Element | null {
                             if (activeInference.status === RQStatus.QUEUED) {
                                 return (
                                     <>
-                                        Automatic annotation request queued
+                                        {t('tasks.autoAnnotationQueued')}
                                         <LoadingOutlined />
                                     </>
                                 );
@@ -51,21 +53,21 @@ function AutomaticAnnotationProgress(props: Props): JSX.Element | null {
                             if (activeInference.status === RQStatus.STARTED) {
                                 return (
                                     <>
-                                        Automatic annotation is in progress
+                                        {t('tasks.autoAnnotationInProgress')}
                                         <LoadingOutlined />
                                     </>
                                 );
                             }
 
                             if (activeInference.status === RQStatus.FAILED) {
-                                return (<>Automatic annotation failed</>);
+                                return (<>{t('tasks.autoAnnotationFailed')}</>);
                             }
 
                             if (activeInference.status === RQStatus.UNKNOWN) {
-                                return (<>Unknown status received</>);
+                                return (<>{t('tasks.unknownStatus')}</>);
                             }
 
-                            return <>Automatic annotation accomplished</>;
+                            return <>{t('tasks.autoAnnotationAccomplished')}</>;
                         })()}
                     </Text>
                 </div>
@@ -81,12 +83,12 @@ function AutomaticAnnotationProgress(props: Props): JSX.Element | null {
             </Col>
             <Col span={1} className='close-auto-annotation-icon'>
                 { activeInference.status !== RQStatus.FAILED && (
-                    <CVATTooltip title='Cancel automatic annotation'>
+                    <CVATTooltip title={t('tasks.cancelAutoAnnotation')}>
                         <CloseOutlined
                             onClick={() => {
                                 Modal.confirm({
-                                    title: 'You are going to cancel automatic annotation?',
-                                    content: 'Reached progress will be lost. Continue?',
+                                    title: t('tasks.cancelAutoAnnotationConfirm'),
+                                    content: t('tasks.cancelAutoAnnotationContent'),
                                     okButtonProps: {
                                         type: 'primary',
                                         danger: true,

@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: MIT
 
 import React, { useState, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { SelectValue, RefSelectProps } from 'antd/lib/select';
 import Autocomplete from 'antd/lib/auto-complete';
 import Input from 'antd/lib/input';
@@ -84,6 +85,7 @@ export default function UserSelector(props: Readonly<Props>): JSX.Element {
     const [initialUsers, setInitialUsers] = useState<User[]>([]);
     const [users, setUsers] = useState<User[]>([]);
     const autocompleteRef = useRef<RefSelectProps | null>(null);
+    const { t } = useTranslation();
 
     useEffect(() => {
         const state = getCVATStore().getState();
@@ -160,7 +162,7 @@ export default function UserSelector(props: Readonly<Props>): JSX.Element {
         <Autocomplete
             ref={autocompleteRef}
             value={searchPhrase}
-            placeholder='Select a user'
+            placeholder={t('common.selectUser')}
             onSearch={setSearchPhrase}
             onSelect={handleSelect}
             onBlur={onBlur}

@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: MIT
 
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
 import { useDispatch } from 'react-redux';
 import { Row, Col } from 'antd/lib/grid';
@@ -49,13 +50,14 @@ function TopBarComponent(props: Readonly<Props>): JSX.Element {
     } = props;
     const [visibility, setVisibility] = useState(defaultVisibility);
     const prevImporting = usePrevious(importing);
+    const history = useHistory();
+    const { t } = useTranslation();
 
     useEffect(() => {
         if (prevImporting && !importing) {
             onApplyFilter(query.filter);
         }
     }, [importing]);
-    const history = useHistory();
 
     return (
         <Row className='cvat-projects-page-top-bar cvat-resource-top-bar-wrapper' justify='center' align='middle'>
@@ -69,7 +71,7 @@ function TopBarComponent(props: Readonly<Props>): JSX.Element {
                             }}
                             defaultValue={query.search ?? ''}
                             className='cvat-projects-page-search-bar'
-                            placeholder='Search ...'
+                            placeholder={t('common.search')}
                         />
                         <ResourceSelectionInfo selectedCount={selectedCount} onSelectAll={onSelectAll} />
                     </div>
@@ -116,7 +118,7 @@ function TopBarComponent(props: Readonly<Props>): JSX.Element {
                                     onClick={(): void => history.push('/projects/create')}
                                     icon={<PlusOutlined />}
                                 >
-                                    Create a new project
+                                    {t('projects.createNewProject')}
                                 </Button>
                                 <Button
                                     className='cvat-import-project-button'
@@ -125,7 +127,7 @@ function TopBarComponent(props: Readonly<Props>): JSX.Element {
                                     icon={importing ? <LoadingOutlined /> : <UploadOutlined />}
                                     onClick={() => dispatch(importActions.openImportBackupModal('project'))}
                                 >
-                                    Create from backup
+                                    {t('common.createFromBackup')}
                                 </Button>
                             </div>
                         )}

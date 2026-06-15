@@ -17,6 +17,7 @@ import {
 import AutomaticAnnotationProgress from 'components/tasks-page/automatic-annotation-progress';
 import MdGuideControl from 'components/md-guide/md-guide-control';
 import Preview from 'components/common/preview';
+import i18n from 'i18n';
 import { cancelInferenceAsync } from 'actions/models-actions';
 import { CombinedState, ActiveInference } from 'reducers';
 import CVATTag, { TagType } from 'components/common/cvat-tag';
@@ -156,7 +157,7 @@ class DetailsComponent extends React.PureComponent<Props, State> {
                         {consensusEnabled && <CVATTag type={TagType.CONSENSUS} />}
                     </Col>
                     <Col>
-                        <Text type='secondary'>Assigned to</Text>
+                        <Text type='secondary'>{i18n.t('common.assignedTo')}</Text>
                         {assigneeSelect}
                     </Col>
                 </Row>

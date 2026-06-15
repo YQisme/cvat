@@ -5,6 +5,7 @@
 
 import './styles.scss';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router';
 import { Row, Col } from 'antd/lib/grid';
 import Text from 'antd/lib/typography/Text';
@@ -27,11 +28,12 @@ export default function CreateTaskPage(props: Props): JSX.Element {
     }
     const many = params.get('many') === 'true';
     const handleCreate: typeof onCreate = (...onCreateParams) => onCreate(...onCreateParams);
+    const { t } = useTranslation();
 
     return (
         <Row justify='center' align='top' className='cvat-create-work-form-wrapper'>
             <Col md={20} lg={16} xl={14} xxl={9}>
-                <Text className='cvat-title'>Create a new task</Text>
+                <Text className='cvat-title'>{t('createTask.title')}</Text>
                 <CreateTaskContent projectId={projectId} onCreate={handleCreate} many={many} />
             </Col>
         </Row>

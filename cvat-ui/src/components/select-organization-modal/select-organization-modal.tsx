@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: MIT
 
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import Modal from 'antd/lib/modal';
 
 import { useSelector, useDispatch } from 'react-redux';
@@ -22,10 +23,11 @@ function SelectOrganizationModal(): JSX.Element {
         visible: state.organizations.selectModal.visible,
         onSelectCallback: state.organizations.selectModal.onSelectCallback,
     }), shallowEqual);
+    const { t } = useTranslation();
 
     return (
         <Modal
-            title='Select an organization'
+            title={t('common.selectOrganization')}
             open={visible}
             footer={null}
             onCancel={() => dispatch(organizationActions.closeSelectOrganizationModal())}
