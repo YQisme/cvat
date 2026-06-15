@@ -13,21 +13,32 @@ interface Props {
     children: React.ReactNode;
 }
 
+function updateDocumentLanguage(locale: string, t: (key: string) => string): void {
+    document.title = t('brand.name');
+    document.documentElement.lang = locale.startsWith('zh') ? 'zh-CN' : 'en';
+    const metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) {
+        metaDescription.setAttribute('content', t('brand.pageDescription'));
+    }
+}
+
 function I18nProvider({ children }: Props): JSX.Element {
-    const { i18n } = useTranslation();
+    const { i18n, t } = useTranslation();
     const [locale, setLocale] = useState(i18n.language);
 
     useEffect(() => {
         setDayjsLocale(i18n.language);
+        updateDocumentLanguage(i18n.language, t);
         const onLanguageChanged = (lng: string): void => {
             setDayjsLocale(lng);
             setLocale(lng);
+            updateDocumentLanguage(lng, i18n.getFixedT(lng));
         };
         i18n.on('languageChanged', onLanguageChanged);
         return () => {
             i18n.off('languageChanged', onLanguageChanged);
         };
-    }, [i18n]);
+    }, [i18n, t]);
 
     const antdLocale = locale.startsWith('zh') ? zhCN : enUS;
 

@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: MIT
 
 import React, { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import {
     DndContext, DragEndEvent, DragOverlay, DragStartEvent, PointerSensor,
@@ -67,6 +68,7 @@ interface Props {
 }
 
 function ObjectListComponent(props: Props): JSX.Element {
+    const { t } = useTranslation();
     const {
         workspace,
         statesHidden,
@@ -335,8 +337,8 @@ function ObjectListComponent(props: Props): JSX.Element {
                 {statesOrdering === StatesOrdering.LAYER ? (
                     <div className='cvat-objects-sidebar-z-layers-panel'>
                         <div className='cvat-objects-sidebar-z-layers-title'>
-                            <Text strong>Layer stack</Text>
-                            <CVATTooltip title='Compact layers'>
+                            <Text strong>{t('annotation.sidebar.layerStack')}</Text>
+                            <CVATTooltip title={t('annotation.tooltips.compactLayers')}>
                                 <Button
                                     className='cvat-objects-sidebar-z-layers-compact-button'
                                     type='text'
@@ -345,7 +347,7 @@ function ObjectListComponent(props: Props): JSX.Element {
                                     onClick={compactLayers}
                                 />
                             </CVATTooltip>
-                            <CVATTooltip title={allLayersCollapsed ? 'Expand all layers' : 'Collapse all layers'}>
+                            <CVATTooltip title={allLayersCollapsed ? t('annotation.tooltips.expandAllLayers') : t('annotation.tooltips.collapseAllLayers')}>
                                 <Button
                                     className='cvat-objects-sidebar-z-layers-collapse-all-button'
                                     type='text'

@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: MIT
 
 import React, { useEffect, useRef, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import ReactDOM from 'react-dom';
 import { debounce } from 'lodash';
 import { Row, Col } from 'antd/lib/grid';
@@ -29,6 +30,7 @@ interface Props {
 }
 
 function PolySimplifyControl(props: Props): React.ReactPortal | null {
+    const { t } = useTranslation();
     const {
         objectState, approxPolyAccuracy, repeatDrawShapeShortcut, onChangeAccuracy, onApply, onCancel, onUpdatePreview,
     } = props;
@@ -166,7 +168,7 @@ function PolySimplifyControl(props: Props): React.ReactPortal | null {
                     onClick={handleCancel}
                 />
             </Col>
-            <CVATTooltip title='Lower values create simpler shapes with fewer points. Higher values preserve more detail and points.'>
+            <CVATTooltip title={t('annotation.tooltips.polySimplifyHint')}>
                 <Text type='secondary'>threshold</Text>
             </CVATTooltip>
         </Row>,

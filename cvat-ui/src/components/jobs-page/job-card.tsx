@@ -11,6 +11,7 @@ import Card from 'antd/lib/card';
 import Descriptions from 'antd/lib/descriptions';
 import { MoreOutlined } from '@ant-design/icons';
 
+import { Job, JobType } from 'cvat-core-wrapper';
 import { translateJobStage, translateJobState } from 'utils/i18n-labels';
 import { useCardHeightHOC, useContextMenuClick } from 'utils/hooks';
 import Preview from 'components/common/preview';

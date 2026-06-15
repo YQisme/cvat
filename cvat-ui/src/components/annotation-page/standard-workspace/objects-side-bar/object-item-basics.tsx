@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: MIT
 
 import React, { useCallback, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Row, Col } from 'antd/lib/grid';
 import { CloseOutlined, MoreOutlined } from '@ant-design/icons';
 import Button from 'antd/lib/button';
@@ -28,6 +29,7 @@ interface LayerPickerProps {
 }
 
 function LayerPicker(props: LayerPickerProps): JSX.Element {
+    const { t } = useTranslation();
     const {
         children, value, visible, onChange, onVisibleChange,
     } = props;
@@ -73,10 +75,10 @@ function LayerPicker(props: LayerPickerProps): JSX.Element {
             title={(
                 <Row justify='space-between' align='middle'>
                     <Col span={14}>
-                        <Text strong>Move to layer</Text>
+                        <Text strong>{t('annotation.sidebar.moveToLayer')}</Text>
                     </Col>
                     <Col span={4}>
-                        <CVATTooltip title='Close'>
+                        <CVATTooltip title={t('common.close')}>
                             <Button
                                 className='cvat-object-item-menu-to-layer-close-button'
                                 type='link'
@@ -295,7 +297,7 @@ function ItemTopComponent(props: Props): JSX.Element {
                 </Text>
             </Col>
             <Col span={12}>
-                <CVATTooltip title='Change current label'>
+                <CVATTooltip title={t('annotation.tooltips.changeCurrentLabel')}>
                     <LabelSelector
                         disabled={locked || shapeType === ShapeType.SKELETON}
                         size='small'

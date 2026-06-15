@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: MIT
 
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
 import { shallowEqual } from 'utils/redux';
 import dayjs from 'dayjs';
@@ -26,6 +27,7 @@ import { changeShowGroundTruth } from 'actions/settings-actions';
 import { ShowGroundTruthIcon } from 'icons';
 
 export default function LabelsListComponent(): JSX.Element {
+    const { t } = useTranslation();
     const dispatch = useDispatch();
     const {
         frame,
@@ -99,17 +101,17 @@ export default function LabelsListComponent(): JSX.Element {
                     <Col span={24}>
                         <Row className='cvat-objects-sidebar-issues-toolbar' justify='space-around' align='middle'>
                             <Col>
-                                <CVATTooltip title='Find the previous frame with issues'>
+                                <CVATTooltip title={t('annotation.tooltips.findPrevIssueFrame')}>
                                     <LeftOutlined className='cvat-issues-sidebar-previous-frame' {...dynamicLeftProps} />
                                 </CVATTooltip>
                             </Col>
                             <Col>
-                                <CVATTooltip title='Find the next frame with issues'>
+                                <CVATTooltip title={t('annotation.tooltips.findNextIssueFrame')}>
                                     <RightOutlined className='cvat-issues-sidebar-next-frame' {...dynamicRightProps} />
                                 </CVATTooltip>
                             </Col>
                             <Col>
-                                <CVATTooltip title='Show/hide all issues'>
+                                <CVATTooltip title={t('annotation.tooltips.showHideAllIssues')}>
                                     {issuesHidden ? (
                                         <EyeInvisibleFilled
                                             className='cvat-issues-sidebar-hidden-issues'
@@ -124,7 +126,7 @@ export default function LabelsListComponent(): JSX.Element {
                                 </CVATTooltip>
                             </Col>
                             <Col>
-                                <CVATTooltip title='Show/hide resolved issues'>
+                                <CVATTooltip title={t('annotation.tooltips.showHideResolvedIssues')}>
                                     { issuesResolvedHidden ? (
                                         <CheckCircleFilled
                                             className='cvat-issues-sidebar-hidden-resolved-status'
@@ -146,7 +148,7 @@ export default function LabelsListComponent(): JSX.Element {
                             {
                                 workspace === Workspace.REVIEW ? (
                                     <Col>
-                                        <CVATTooltip title='Show Ground truth annotations and conflicts'>
+                                        <CVATTooltip title={t('annotation.tooltips.showGroundTruth')}>
                                             <Icon
                                                 className={
                                                     `cvat-objects-sidebar-show-ground-truth ${showGroundTruth ? 'cvat-objects-sidebar-show-ground-truth-active' : ''}`

@@ -158,7 +158,7 @@ function AnnotationMenuComponent(): JSX.Element {
                                                 removeUpTo = value ?? undefined;
                                             }}
                                         />
-                                        <CVATTooltip title='Applicable only for annotations in range'>
+                                        <CVATTooltip title={t('annotation.applicableOnlyInRange')}>
                                             <br />
                                             <br />
                                             <Checkbox
@@ -235,7 +235,7 @@ function AnnotationMenuComponent(): JSX.Element {
         onClick: () => {
             Modal.confirm({
                 title: t('annotation.finishJobConfirm'),
-                content: t('annotation.finishJobHint'),
+                content: t('annotation.finishJobHint', { state: translateJobState(JobState.COMPLETED) }),
                 okText: t('common.continue'),
                 cancelText: t('common.cancel'),
                 className: 'cvat-modal-content-finish-job',

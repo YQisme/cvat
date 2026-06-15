@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: MIT
 
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { useDraggable } from '@dnd-kit/core';
 import {
@@ -26,6 +27,7 @@ interface LayerHeaderProps {
 
 // Renders layer controls and exposes the layer itself as a draggable handle target.
 function LayerHeader(props: LayerHeaderProps): JSX.Element {
+    const { t } = useTranslation();
     const {
         zOrder, selected, visible, collapsed, selectLayer, toggleLayerCollapsed,
     } = props;
@@ -53,7 +55,7 @@ function LayerHeader(props: LayerHeaderProps): JSX.Element {
             style={style}
         >
             <div>
-                <CVATTooltip title={collapsed ? 'Expand layer' : 'Collapse layer'}>
+                <CVATTooltip title={collapsed ? t('annotation.tooltips.expandLayer') : t('annotation.tooltips.collapseLayer')}>
                     <Button
                         className='cvat-objects-sidebar-z-layer-collapse-button'
                         type='text'
@@ -71,7 +73,7 @@ function LayerHeader(props: LayerHeaderProps): JSX.Element {
                         onClick={(): void => selectLayer(zOrder)}
                     />
                 </CVATTooltip>
-                <CVATTooltip title='Drag layer'>
+                <CVATTooltip title={t('annotation.tooltips.dragLayer')}>
                     <Button
                         {...attributes}
                         {...listeners}

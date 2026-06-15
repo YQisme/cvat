@@ -135,7 +135,7 @@ const getKeypointAttributesSubfields = (labels: Label[]): Record<string, any> =>
 };
 
 function FiltersModalComponent(): JSX.Element {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const { labels, activeFilters, visible } = useSelector(
         (state: CombinedState) => ({
             labels: state.annotation.job.labels,
@@ -159,7 +159,7 @@ function FiltersModalComponent(): JSX.Element {
             ...AntdConfig,
             fields: {
                 label: {
-                    label: 'Label',
+                    label: t('annotation.filters.label'),
                     type: 'select',
                     valueSources: ['value'] as 'value'[],
                     fieldSettings: {
@@ -170,79 +170,79 @@ function FiltersModalComponent(): JSX.Element {
                     },
                 },
                 type: {
-                    label: 'Type',
+                    label: t('annotation.filters.type'),
                     type: 'select',
                     fieldSettings: {
                         listValues: [
-                            { value: 'shape', title: 'Shape' },
-                            { value: 'track', title: 'Track' },
-                            { value: 'tag', title: 'Tag' },
+                            { value: 'shape', title: t('annotation.filters.typeShape') },
+                            { value: 'track', title: t('annotation.filters.typeTrack') },
+                            { value: 'tag', title: t('annotation.filters.typeTag') },
                         ],
                     },
                 },
                 shape: {
-                    label: 'Shape',
+                    label: t('annotation.filters.shape'),
                     type: 'select',
                     fieldSettings: {
                         listValues: [
-                            { value: 'rectangle', title: 'Rectangle' },
-                            { value: 'points', title: 'Points' },
-                            { value: 'polyline', title: 'Polyline' },
-                            { value: 'polygon', title: 'Polygon' },
-                            { value: 'cuboid', title: 'Cuboid' },
-                            { value: 'ellipse', title: 'Ellipse' },
-                            { value: 'skeleton', title: 'Skeleton' },
-                            { value: 'mask', title: 'Mask' },
+                            { value: 'rectangle', title: t('annotation.filters.shapeRectangle') },
+                            { value: 'points', title: t('annotation.filters.shapePoints') },
+                            { value: 'polyline', title: t('annotation.filters.shapePolyline') },
+                            { value: 'polygon', title: t('annotation.filters.shapePolygon') },
+                            { value: 'cuboid', title: t('annotation.filters.shapeCuboid') },
+                            { value: 'ellipse', title: t('annotation.filters.shapeEllipse') },
+                            { value: 'skeleton', title: t('annotation.filters.shapeSkeleton') },
+                            { value: 'mask', title: t('annotation.filters.shapeMask') },
                         ],
                     },
                 },
                 occluded: {
-                    label: 'Occluded',
+                    label: t('annotation.filters.occluded'),
                     type: 'boolean',
                 },
                 width: {
-                    label: 'Width',
+                    label: t('annotation.filters.width'),
                     type: 'number',
                     fieldSettings: { min: 0 },
                 },
                 height: {
-                    label: 'Height',
+                    label: t('annotation.filters.height'),
                     type: 'number',
                     fieldSettings: { min: 0 },
                 },
                 rotation: {
-                    label: 'Rotation',
+                    label: t('annotation.filters.rotation'),
                     type: 'number',
                     fieldSettings: { min: 0 },
                 },
                 objectID: {
-                    label: 'ObjectID',
+                    label: t('annotation.filters.objectId'),
                     type: 'number',
                     hideForCompare: true,
                     fieldSettings: { min: 0 },
                 },
                 serverID: {
-                    label: 'ServerID',
+                    label: t('annotation.filters.serverId'),
                     type: 'number',
                     hideForCompare: true,
                     fieldSettings: { min: 0 },
                 },
                 score: {
-                    label: 'Score',
+                    label: t('annotation.filters.score'),
                     type: 'number',
                     fieldSettings: { min: 0, max: 1 },
                 },
                 votes: {
-                    label: 'Votes',
+                    label: t('annotation.filters.votes'),
                     type: 'number',
                     fieldSettings: { min: 0 },
                 },
                 zOrder: {
-                    label: 'Z order',
+                    label: t('annotation.filters.zOrder'),
                     type: 'number',
                 },
                 attr: {
-                    label: 'Attributes',
+                    label: t('annotation.filters.attributes'),
                     type: '!struct',
                     subfields: getAttributesSubfields(labels),
                     fieldSettings: {
@@ -263,7 +263,7 @@ function FiltersModalComponent(): JSX.Element {
             ...AntdConfig,
             fields: {
                 label: {
-                    label: 'Label',
+                    label: t('annotation.filters.label'),
                     type: 'select',
                     operators: ['select_equals', 'select_any_in'],
                     valueSources: ['value'] as 'value'[],
@@ -272,12 +272,12 @@ function FiltersModalComponent(): JSX.Element {
                     },
                 },
                 occluded: {
-                    label: 'Occluded',
+                    label: t('annotation.filters.occluded'),
                     type: 'boolean',
                 },
                 ...(Object.keys(keypointAttributesSubfields).length ? {
                     attr: {
-                        label: 'Attributes',
+                        label: t('annotation.filters.attributes'),
                         type: '!struct',
                         subfields: keypointAttributesSubfields,
                         fieldSettings: {
@@ -302,7 +302,7 @@ function FiltersModalComponent(): JSX.Element {
         } catch (_) {
             setFilters([]);
         }
-    }, []);
+    }, [labels, t, i18n.language]);
 
     useEffect(() => {
         window.localStorage.setItem(FILTERS_HISTORY, JSON.stringify(filters));
@@ -412,7 +412,7 @@ function FiltersModalComponent(): JSX.Element {
                         QbUtils.queryString(keypointTree, keypointConfig) : '';
                     const queryString = [
                         objectQueryString,
-                        keypointQueryString ? `Elements: ${keypointQueryString}` : '',
+                        keypointQueryString ? `${t('annotation.filters.elementsPrefix')} ${keypointQueryString}` : '',
                     ].filter((item) => !!item).join(' | ');
 
                     return {
@@ -483,7 +483,7 @@ function FiltersModalComponent(): JSX.Element {
                     content={menu}
                 >
                     <Button type='text' className='cvat-filters-modal-recently-used-button'>
-                        Recently used
+                        {t('annotation.filters.recentlyUsed')}
                         {' '}
                         <DownOutlined />
                     </Button>
@@ -491,7 +491,7 @@ function FiltersModalComponent(): JSX.Element {
             </div>
             {!!config.fields && (
                 <>
-                    <Typography.Text strong>Objects</Typography.Text>
+                    <Typography.Text strong>{t('annotation.filters.objects')}</Typography.Text>
                     <Query
                         {...config}
                         value={immutableTree as ImmutableTree}
@@ -502,7 +502,7 @@ function FiltersModalComponent(): JSX.Element {
             )}
             {!!keypointConfig.fields && (
                 <>
-                    <Typography.Text strong>Elements</Typography.Text>
+                    <Typography.Text strong>{t('annotation.filters.elements')}</Typography.Text>
                     <Query
                         {...keypointConfig}
                         value={keypointImmutableTree as ImmutableTree}

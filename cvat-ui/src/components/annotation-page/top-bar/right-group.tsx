@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: MIT
 
 import React, { useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Col } from 'antd/lib/grid';
 import Icon, { InfoCircleOutlined } from '@ant-design/icons';
 import Select from 'antd/lib/select';
@@ -17,6 +18,7 @@ import {
     DimensionType, Job, JobStage, JobState,
 } from 'cvat-core-wrapper';
 import { Workspace } from 'reducers';
+import { translateWorkspace } from 'utils/i18n-labels';
 
 import MDEditor from '@uiw/react-md-editor';
 import rehypeSanitize from 'rehype-sanitize';
@@ -32,6 +34,7 @@ interface Props {
 }
 
 function RightGroup(props: Props): JSX.Element {
+    const { t } = useTranslation();
     const {
         showStatistics,
         changeWorkspace,
@@ -67,11 +70,11 @@ function RightGroup(props: Props): JSX.Element {
             }
         }).catch((error: unknown) => {
             notification.error({
-                message: 'Could not receive annotation guide',
-                description: error instanceof Error ? error.message : 'Unknown error',
+                message: t('annotation.topBar.guideLoadFailed'),
+                description: error instanceof Error ? error.message : t('annotation.topBar.unknownError'),
             });
         });
-    }, [jobInstance]);
+    }, [jobInstance, t]);
 
     useEffect(() => {
         if (Number.isInteger(jobInstance?.guideId)) {
@@ -121,7 +124,7 @@ function RightGroup(props: Props): JSX.Element {
                 }}
             >
                 <Icon component={FullscreenIcon} />
-                Fullscreen
+                {t('annotation.topBar.fullscreen')}
             </Button>
             { jobInstance.guideId !== null && (
                 <Button
@@ -130,7 +133,7 @@ function RightGroup(props: Props): JSX.Element {
                     onClick={openGuide}
                 >
                     <Icon component={GuideIcon} />
-                    Guide
+                    {t('annotation.topBar.guide')}
                 </Button>
             )}
             <Button
@@ -139,7 +142,7 @@ function RightGroup(props: Props): JSX.Element {
                 onClick={showStatistics}
             >
                 <InfoCircleOutlined />
-                Info
+                {t('annotation.topBar.info')}
             </Button>
             <Button
                 type='link'
@@ -149,7 +152,7 @@ function RightGroup(props: Props): JSX.Element {
                 onClick={showFilters}
             >
                 <Icon component={FilterIcon} />
-                Filters
+                {t('annotation.topBar.filters')}
             </Button>
             <div>
                 <Select
@@ -165,14 +168,14 @@ function RightGroup(props: Props): JSX.Element {
                             }
                             return (
                                 <Select.Option disabled={ws !== Workspace.STANDARD3D} key={ws} value={ws}>
-                                    {ws}
+                                    {translateWorkspace(ws)}
                                 </Select.Option>
                             );
                         }
                         if (ws !== Workspace.STANDARD3D) {
                             return (
                                 <Select.Option key={ws} value={ws}>
-                                    {ws}
+                                    {translateWorkspace(ws)}
                                 </Select.Option>
                             );
                         }

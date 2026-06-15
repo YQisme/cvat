@@ -40,6 +40,7 @@ import { logoutAsync } from 'actions/auth-actions';
 import { shortcutsActions, registerComponentShortcuts } from 'actions/shortcuts-actions';
 import { getOrganizationsAsync, organizationActions } from 'actions/organization-actions';
 import { AboutState, CombinedState } from 'reducers';
+import { translateBrandField } from 'utils/i18n-labels';
 import { useIsMounted, usePlugins } from 'utils/hooks';
 import GlobalHotKeys, { KeyMap } from 'utils/mousetrap-react';
 import { ShortcutScope } from 'utils/enums';
@@ -237,10 +238,10 @@ function HeaderComponent(props: Props): JSX.Element {
 
     const showAboutModal = useCallback((): void => {
         Modal.info({
-            title: `${about.server.name}`,
+            title: translateBrandField('name', about.server.name),
             content: (
                 <div>
-                    <p>{`${about.server.description}`}</p>
+                    <p>{translateBrandField('description', about.server.description)}</p>
                     <p>
                         <Text strong>{t('header.serverVersion')}</Text>
                         <Text type='secondary'>{` ${about.server.version}`}</Text>

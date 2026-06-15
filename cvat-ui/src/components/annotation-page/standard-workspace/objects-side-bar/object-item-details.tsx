@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: MIT
 
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Row, Col } from 'antd/lib/grid';
 import Text from 'antd/lib/typography/Text';
 import Collapse from 'antd/lib/collapse';
@@ -92,6 +93,7 @@ function attrAreTheSame(prevProps: Props, nextProps: Props): boolean {
 }
 
 function ItemAttributesComponent(props: Props): JSX.Element | null {
+    const { t } = useTranslation();
     const {
         collapsed, attributes, values, readonly, changeAttribute, collapse,
         sizeParams, changeSize, source, score, votes,
@@ -111,7 +113,7 @@ function ItemAttributesComponent(props: Props): JSX.Element | null {
 
     const scoreTag = withScore ? (
         <CVATTooltip
-            title='Consensus score'
+            title={t('annotation.tooltips.consensusScore')}
             align={{
                 ...baseTooltipAlign,
                 targetOffset: ['25%', '40%'],
@@ -124,7 +126,7 @@ function ItemAttributesComponent(props: Props): JSX.Element | null {
     ) : null;
     const votesTag = withVotes ? (
         <CVATTooltip
-            title='Number of votes'
+            title={t('annotation.tooltips.numberOfVotes')}
             align={{
                 ...baseTooltipAlign,
                 targetOffset: ['40%', '40%'],
@@ -159,7 +161,7 @@ function ItemAttributesComponent(props: Props): JSX.Element | null {
                     key: 'details',
                     label: (
                         <Row style={{ width: '100%' }} align='middle' justify='space-between'>
-                            <Text style={{ fontSize: 10 }} type='secondary'>DETAILS</Text>
+                            <Text style={{ fontSize: 10 }} type='secondary'>{t('annotation.sidebar.details')}</Text>
                             {scoreVotesElement}
                         </Row>
                     ),

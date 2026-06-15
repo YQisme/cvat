@@ -33,6 +33,7 @@ import {
 } from 'actions/annotation-actions';
 import LabelSelector from 'components/label-selector/label-selector';
 import CVATTooltip from 'components/common/cvat-tooltip';
+import i18n from 'i18n';
 import ApproximationAccuracy from 'components/annotation-page/standard-workspace/controls-side-bar/approximation-accuracy';
 import { enableImageFilter as enableImageFilterAction, disableImageFilter as disableImageFilterAction } from 'actions/settings-actions';
 import { ImageFilter, ImageFilterAlias, hasFilter } from 'utils/image-processing';
@@ -356,7 +357,7 @@ class OpenCVControlComponent extends React.PureComponent<Props & DispatchToProps
                 </Row>
                 <Row justify='start' className='cvat-opencv-drawing-tools'>
                     <Col>
-                        <CVATTooltip title='Intelligent scissors' className='cvat-opencv-drawing-tool'>
+                        <CVATTooltip title={i18n.t('annotation.tooltips.intelligentScissors')} className='cvat-opencv-drawing-tool'>
                             <Button
                                 className='cvat-opencv-scissors-tool-button'
                                 onClick={() => {
@@ -389,7 +390,7 @@ class OpenCVControlComponent extends React.PureComponent<Props & DispatchToProps
         return (
             <Row justify='start'>
                 <Col>
-                    <CVATTooltip title='Histogram equalization' className='cvat-opencv-image-tool'>
+                    <CVATTooltip title={i18n.t('annotation.tooltips.histogramEqualization')} className='cvat-opencv-image-tool'>
                         <Button
                             className={
                                 hasFilter(filters, ImageFilterAlias.HISTOGRAM_EQUALIZATION) ?
@@ -592,7 +593,7 @@ class OpenCVControlComponent extends React.PureComponent<Props & DispatchToProps
                         }
                     }}
                 >
-                    <CVATTooltip title='OpenCV tools' placement='right'>
+                    <CVATTooltip title={i18n.t('annotation.tooltips.opencvTools')} placement='right'>
                         <Icon {...dynamicIconProps} component={OpenCVIcon} />
                     </CVATTooltip>
                 </CustomPopover>

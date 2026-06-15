@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: MIT
 
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import Icon from '@ant-design/icons';
 
 import { MoveIcon } from 'icons';
@@ -17,10 +18,11 @@ export interface Props {
 }
 
 function MoveControl(props: Props): JSX.Element {
+    const { t } = useTranslation();
     const { canvasInstance, activeControl } = props;
 
     return (
-        <CVATTooltip title='Move the image' placement='right'>
+        <CVATTooltip title={t('annotation.tooltips.moveImage')} placement='right'>
             <Icon
                 component={MoveIcon}
                 className={

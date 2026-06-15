@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: MIT
 
 import React, { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import Layout from 'antd/lib/layout';
 import Spin from 'antd/lib/spin';
 import notification from 'antd/lib/notification';
@@ -41,6 +42,7 @@ interface Props {
 }
 
 export default function AnnotationPageComponent(props: Props): JSX.Element {
+    const { t } = useTranslation();
     const {
         job, fetching, annotationsInitialized, workspace, frameNumber,
         getJob, closeJob, saveLogs, changeFrame,
@@ -84,10 +86,10 @@ export default function AnnotationPageComponent(props: Props): JSX.Element {
                 const notificationKey = `cvat-notification-continue-job-${job.id}`;
                 notification.info({
                     key: notificationKey,
-                    message: `You finished working on frame ${latestFrame}`,
+                    message: t('annotation.notifications.continueFrameMessage', { frame: latestFrame }),
                     description: (
                         <span>
-                            Press
+                            {t('annotation.notifications.continueFramePress')}
                             <Button
                                 className='cvat-notification-continue-job-button'
                                 type='link'
@@ -96,9 +98,9 @@ export default function AnnotationPageComponent(props: Props): JSX.Element {
                                     notification.destroy(notificationKey);
                                 }}
                             >
-                                here
+                                {t('annotation.notifications.continueFrameHere')}
                             </Button>
-                            if you would like to continue
+                            {t('annotation.notifications.continueFrameSuffix')}
                         </span>
                     ),
                     placement: 'topRight',
@@ -110,16 +112,20 @@ export default function AnnotationPageComponent(props: Props): JSX.Element {
 
             if (!job.labels.length) {
                 notification.warning({
-                    message: 'No labels',
+                    message: t('annotation.notifications.noLabels'),
                     description: (
                         <span>
-                            {`${job.projectId ? 'Project' : 'Task'} ${
-                                job.projectId || job.taskId
-                            } does not contain any labels. `}
+                            {t(job.projectId ?
+                                'annotation.notifications.noLabelsDescriptionProject' :
+                                'annotation.notifications.noLabelsDescriptionTask', {
+                                id: job.projectId || job.taskId,
+                            })}
+                            {' '}
                             <a href={`/${job.projectId ? 'projects' : 'tasks'}/${job.projectId || job.taskId}/`}>
-                                Add
+                                {t('annotation.notifications.noLabelsAddLink')}
                             </a>
-                            {' the first one for editing annotation.'}
+                            {' '}
+                            {t('annotation.notifications.noLabelsAddSuffix')}
                         </span>
                     ),
                     placement: 'topRight',
@@ -127,7 +133,7 @@ export default function AnnotationPageComponent(props: Props): JSX.Element {
                 });
             }
         }
-    }, [job, fetching, prevJob, prevFetching]);
+    }, [job, fetching, prevJob, prevFetching, t, frameNumber, changeFrame]);
 
     useEffect(() => {
         if (job) {

@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: MIT
 
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import Icon from '@ant-design/icons';
 
 import { FitIcon } from 'icons';
@@ -14,10 +15,11 @@ export interface Props {
 }
 
 function FitControl(props: Props): JSX.Element {
+    const { t } = useTranslation();
     const { canvasInstance } = props;
 
     return (
-        <CVATTooltip title='Fit the image [Double Click]' placement='right'>
+        <CVATTooltip title={t('annotation.tooltips.fitImage')} placement='right'>
             <Icon className='cvat-fit-control' component={FitIcon} onClick={(): void => canvasInstance.fit()} />
         </CVATTooltip>
     );

@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: MIT
 
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import Icon from '@ant-design/icons';
 
 import { CursorIcon } from 'icons';
@@ -35,6 +36,7 @@ const componentShortcuts = {
 registerComponentShortcuts(componentShortcuts);
 
 function CursorControl(props: Props): JSX.Element {
+    const { t } = useTranslation();
     const {
         canvasInstance, activeControl, cursorShortkey,
     } = props;
@@ -60,7 +62,7 @@ function CursorControl(props: Props): JSX.Element {
                 keyMap={subKeyMap(componentShortcuts, keyMap)}
                 handlers={handlers}
             />
-            <CVATTooltip title={`Cursor ${cursorShortkey}`} placement='right'>
+            <CVATTooltip title={t('annotation.tooltips.cursor', { shortcut: cursorShortkey })} placement='right'>
                 <Icon
                     component={CursorIcon}
                     className={

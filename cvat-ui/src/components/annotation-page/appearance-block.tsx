@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: MIT
 
 import React, { Dispatch } from 'react';
+import { useTranslation } from 'react-i18next';
 import { AnyAction } from 'redux';
 import { connect } from 'react-redux';
 import Text from 'antd/lib/typography/Text';
@@ -17,6 +18,7 @@ import ColorPicker from 'components/annotation-page/standard-workspace/objects-s
 import { ColorizeIcon } from 'icons';
 import { ColorBy, CombinedState, Workspace } from 'reducers';
 import { DimensionType, Job } from 'cvat-core-wrapper';
+import { translateColorBy } from 'utils/i18n-labels';
 import { OrientationVisibility } from 'cvat-canvas3d-wrapper';
 import { collapseAppearance as collapseAppearanceAction } from 'actions/annotation-actions';
 import {
@@ -140,6 +142,7 @@ function mapDispatchToProps(dispatch: Dispatch<AnyAction>): DispatchToProps {
 type Props = StateToProps & DispatchToProps;
 
 function AppearanceBlock(props: Props): JSX.Element {
+    const { t } = useTranslation();
     const {
         appearanceCollapsed,
         colorBy,
@@ -191,24 +194,24 @@ function AppearanceBlock(props: Props): JSX.Element {
             items={[{
                 label: (
                     <Text strong className='cvat-objects-appearance-collapse-header'>
-                        Appearance
+                        {t('annotation.appearance.title')}
                     </Text>
                 ),
                 key: 'appearance',
                 children: (
                     <div className='cvat-objects-appearance-content cvat-appearance-block'>
                         <GlobalHotKeys keyMap={subKeyMap(componentShortcuts, keyMap)} handlers={handlers} />
-                        <Text type='secondary'>Color by</Text>
+                        <Text type='secondary'>{t('annotation.appearance.colorBy')}</Text>
                         <Radio.Group
                             className='cvat-appearance-color-by-radio-group'
                             value={colorBy}
                             onChange={(event: RadioChangeEvent) => changeShapesColorBy(event.target.value)}
                         >
                             {Object.keys(nextColorBy).map((val) => (
-                                <Radio.Button value={val} key={val}>{val}</Radio.Button>
+                                <Radio.Button value={val} key={val}>{translateColorBy(val)}</Radio.Button>
                             ))}
                         </Radio.Group>
-                        <Text type='secondary'>Opacity</Text>
+                        <Text type='secondary'>{t('annotation.appearance.opacity')}</Text>
                         <Slider
                             className='cvat-appearance-opacity-slider'
                             onChange={changeShapesOpacity}
@@ -216,7 +219,7 @@ function AppearanceBlock(props: Props): JSX.Element {
                             min={0}
                             max={100}
                         />
-                        <Text type='secondary'>Selected opacity</Text>
+                        <Text type='secondary'>{t('annotation.appearance.selectedOpacity')}</Text>
                         <Slider
                             className='cvat-appearance-selected-opacity-slider'
                             onChange={changeSelectedShapesOpacity}
@@ -231,7 +234,7 @@ function AppearanceBlock(props: Props): JSX.Element {
                             }}
                             checked={outlined}
                         >
-                            Outlined borders
+                            {t('annotation.appearance.outlinedBorders')}
                             <ColorPicker
                                 onChange={(color) => changeShapesOutlinedBorders(outlined, color)}
                                 value={outlineColor}
@@ -255,7 +258,7 @@ function AppearanceBlock(props: Props): JSX.Element {
                                         });
                                     }}
                                 >
-                                    Cuboid orientation
+                                    {t('annotation.appearance.cuboidOrientation')}
                                 </Checkbox>
                             </div>
                         )}
@@ -267,7 +270,7 @@ function AppearanceBlock(props: Props): JSX.Element {
                                 }}
                                 checked={showBitmap}
                             >
-                                Show bitmap
+                                {t('annotation.appearance.showBitmap')}
                             </Checkbox>
                         )}
                         {is2D && (
@@ -276,7 +279,7 @@ function AppearanceBlock(props: Props): JSX.Element {
                                 onChange={changeShowProjections}
                                 checked={showProjections}
                             >
-                                Show projections
+                                {t('annotation.appearance.showProjections')}
                             </Checkbox>
                         )}
                     </div>

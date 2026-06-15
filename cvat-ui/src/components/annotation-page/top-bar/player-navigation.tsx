@@ -6,6 +6,7 @@
 import React, {
     useState, useEffect, useCallback, CSSProperties,
 } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Row, Col } from 'antd/lib/grid';
 import Icon, {
@@ -80,6 +81,7 @@ const componentShortcuts = {
 registerComponentShortcuts(componentShortcuts);
 
 function PlayerNavigation(props: Props): JSX.Element {
+    const { t } = useTranslation();
     const {
         startFrame,
         stopFrame,
@@ -124,10 +126,10 @@ function PlayerNavigation(props: Props): JSX.Element {
         if (!playing) {
             switchNavigationBlocked(true);
             Modal.confirm({
-                title: `Do you want to delete frame #${frameNumber}?`,
-                content: 'The frame will not be visible in navigation and exported datasets, but it still can be restored with all the annotations.',
+                title: t('annotation.player.deleteFrameTitle', { frame: frameNumber }),
+                content: t('annotation.player.deleteFrameContent'),
                 className: 'cvat-modal-delete-frame',
-                okText: 'Delete',
+                okText: t('common.delete'),
                 okType: 'danger',
                 onOk: () => {
                     switchNavigationBlocked(false);
@@ -138,7 +140,7 @@ function PlayerNavigation(props: Props): JSX.Element {
                 },
             });
         }
-    }, [playing, frameNumber]);
+    }, [playing, frameNumber, t]);
 
     const handlers: Record<keyof typeof componentShortcuts, (event?: KeyboardEvent) => void> = {
         DELETE_FRAME: (event: KeyboardEvent | undefined) => {
@@ -181,7 +183,7 @@ function PlayerNavigation(props: Props): JSX.Element {
     }, {});
 
     const deleteFrameIcon = !frameDeleted ? (
-        <CVATTooltip title={`Delete the frame ${deleteFrameShortcut}`}>
+        <CVATTooltip title={t('annotation.player.deleteFrameTooltip', { shortcut: deleteFrameShortcut })}>
             <DeleteOutlined
                 style={deleteFrameIconStyle}
                 className='cvat-player-delete-frame'
@@ -189,7 +191,7 @@ function PlayerNavigation(props: Props): JSX.Element {
             />
         </CVATTooltip>
     ) : (
-        <CVATTooltip title='Restore the frame'>
+        <CVATTooltip title={t('annotation.player.restoreFrame')}>
             <Icon
                 style={deleteFrameIconStyle}
                 className='cvat-player-restore-frame'
@@ -244,10 +246,10 @@ function PlayerNavigation(props: Props): JSX.Element {
                         </CVATTooltip>
                     </Col>
                     <Col className='cvat-player-frame-actions' offset={1}>
-                        <CVATTooltip title='Copy frame filename'>
+                        <CVATTooltip title={t('annotation.tooltips.copyFrameFilename')}>
                             <CopyOutlined className='cvat-player-copy-frame-name-icon' onClick={onCopyFilenameIconClick} />
                         </CVATTooltip>
-                        <CVATTooltip title='Create frame URL'>
+                        <CVATTooltip title={t('annotation.tooltips.openFrameUrl')}>
                             <LinkOutlined className='cvat-player-frame-url-icon' onClick={onURLIconClick} />
                         </CVATTooltip>
                         { deleteFrameIcon }
@@ -255,7 +257,7 @@ function PlayerNavigation(props: Props): JSX.Element {
                 </Row>
             </Col>
             <Col>
-                <CVATTooltip title={`Press ${focusFrameInputShortcut} to focus here`}>
+                <CVATTooltip title={t('annotation.tooltips.focusFrameInput', { shortcut: focusFrameInputShortcut })}>
                     <InputNumber
                         ref={inputFrameRef}
                         className='cvat-player-frame-selector'
@@ -283,7 +285,7 @@ function PlayerNavigation(props: Props): JSX.Element {
             <Col className='cvat-player-actions'>
                 {
                     showSearchFrameByName && (
-                        <CVATTooltip title={`Search frame by name ${searchFrameByNameShortcut}`}>
+                        <CVATTooltip title={t('annotation.tooltips.searchFrameByName', { shortcut: searchFrameByNameShortcut })}>
                             <SearchOutlined
                                 className='cvat-player-search-frame-name-icon'
                                 onClick={onSearchIconClick}

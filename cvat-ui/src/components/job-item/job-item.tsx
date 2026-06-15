@@ -129,7 +129,7 @@ function JobItem(props: Readonly<Props>): JSX.Element {
     }
     const frameCountPercent = ((job.frameCount / (task.size || 1)) * 100).toFixed(0);
     const frameCountPercentRepresentation = frameCountPercent === '0' ? '<1' : frameCountPercent;
-    const jobName = `Job #${job.id}`;
+    const jobName = t('jobs.jobNumber', { id: job.id });
 
     let tag = null;
     if (job.type === JobType.GROUND_TRUTH) {

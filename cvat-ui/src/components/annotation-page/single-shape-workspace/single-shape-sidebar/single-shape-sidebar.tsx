@@ -8,6 +8,7 @@ import {
 import React, {
     useCallback, useEffect, useReducer, useRef,
 } from 'react';
+import { useTranslation } from 'react-i18next';
 import Layout, { SiderProps } from 'antd/lib/layout';
 import { Row, Col } from 'antd/lib/grid';
 import Text from 'antd/lib/typography/Text';
@@ -203,6 +204,7 @@ const componentShortcuts = {
 registerComponentShortcuts(componentShortcuts);
 
 function SingleShapeSidebar(): JSX.Element {
+    const { t } = useTranslation();
     const appDispatch = useDispatch();
     const store = useStore<CombinedState>();
     const {
@@ -308,7 +310,7 @@ function SingleShapeSidebar(): JSX.Element {
                 message.open({
                     duration: 1,
                     type: 'success',
-                    content: 'You tagged the job as completed',
+                    content: t('annotation.jobCompleted'),
                     className: 'cvat-annotation-job-finished-success',
                 });
             })).finally(() => {
