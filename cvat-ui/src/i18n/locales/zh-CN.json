@@ -73,6 +73,7 @@
     "close": "关闭",
     "save": "保存",
     "saving": "保存中...",
+    "submit": "提交",
     "assignedTo": "分配给",
     "assignee": "负责人",
     "organization": "组织",
@@ -106,7 +107,16 @@
     "goToProject": "前往项目",
     "goToParent": "前往父作业",
     "goToReplicas": "前往副本",
-    "goToBugTracker": "前往缺陷跟踪"
+    "goToBugTracker": "前往缺陷跟踪",
+    "edit": "编辑",
+    "subset": "子集",
+    "backToTasks": "返回任务列表",
+    "backToProject": "返回项目",
+    "backToProjects": "返回项目列表",
+    "backToOrganization": "返回组织",
+    "backToWebhooks": "返回 Webhook 列表",
+    "connecting": "连接中...",
+    "cannotConnect": "无法连接到服务器"
   },
   "empty": {
     "noSearchResults": "没有匹配搜索的结果...",
@@ -140,10 +150,28 @@
     "unknownStatus": "收到未知状态",
     "cancelAutoAnnotation": "取消自动标注",
     "cancelAutoAnnotationConfirm": "您即将取消自动标注？",
-    "cancelAutoAnnotationContent": "已完成的进度将丢失。是否继续？"
+    "cancelAutoAnnotationContent": "已完成的进度将丢失。是否继续？",
+    "open": "打开",
+    "jobsProgressDone": "• {{count}} 已完成 ",
+    "jobsProgressOnReview": "• {{count}} 审核中 ",
+    "jobsProgressAnnotating": "• {{count}} 标注中 ",
+    "jobsProgressTotal": "• {{count}} 总计",
+    "createdByOn": "由 {{owner}} 创建于 {{date}}",
+    "createdOn": "创建于 {{date}}",
+    "taskCreatedByOn": "任务 #{{id}} 由 {{owner}} 创建于 {{date}}",
+    "lastUpdated": "最后更新 {{time}}",
+    "requestCurrentProgress": "请求当前进度",
+    "issueTracker": "缺陷跟踪",
+    "openIssue": "打开缺陷",
+    "issueTrackerUrlRequired": "缺陷跟踪应为 URL 地址"
   },
   "projects": {
-    "createNewProject": "创建新项目"
+    "createNewProject": "创建新项目",
+    "createdBy": "由 {{owner}} 创建",
+    "created": "已创建",
+    "lastUpdated": "最后更新 {{time}}",
+    "createdOn": "项目 #{{id}} 由 {{owner}} 创建于 {{date}}",
+    "createdOnNoOwner": "项目 #{{id}} 创建于 {{date}}"
   },
   "jobs": {
     "stageAndState": "阶段和状态",
@@ -152,8 +180,18 @@
     "fetchFailed": "获取失败，请查看控制台输出",
     "unsolvedIssues": "未解决的问题",
     "resolvedIssues": "已解决的问题",
+    "duration": "时长：",
+    "created": "创建时间：",
+    "updated": "更新时间：",
+    "loading": "加载中...",
     "frameCount": "帧数：",
-    "frameRange": "帧范围："
+    "frameCountLabel": "帧数",
+    "frameRange": "帧范围：",
+    "title": "作业",
+    "noJobsFound": "未找到作业",
+    "groundTruth": "真值",
+    "parent": "父作业",
+    "replica": "副本"
   },
   "cloudStorage": {
     "createCloudStorage": "创建云存储"
@@ -276,12 +314,48 @@
   "requests": {
     "lightweightBackup": "轻量备份"
   },
+  "resource": {
+    "sortBy": "排序",
+    "quickFilters": "快捷筛选",
+    "filter": "筛选",
+    "clearFilters": "清除筛选",
+    "reset": "重置",
+    "apply": "应用",
+    "recent": "最近",
+    "ascendingSort": "升序",
+    "descendingSort": "降序",
+    "addRule": "添加规则",
+    "addGroup": "添加组",
+    "predefinedFilters": {
+      "assignedToMe": "分配给我",
+      "ownedByMe": "我创建的",
+      "notCompleted": "未完成",
+      "notAReplica": "非副本"
+    }
+  },
+  "jobStage": {
+    "annotation": "标注",
+    "validation": "验证",
+    "acceptance": "验收"
+  },
+  "jobState": {
+    "new": "新建",
+    "in progress": "进行中",
+    "completed": "已完成",
+    "rejected": "已拒绝"
+  },
+  "guide": {
+    "taskDescription": "任务描述",
+    "projectDescription": "项目描述",
+    "edit": "编辑"
+  },
   "server": {
     "connectionCheckFailed": "连接检查失败",
     "servicesNotHealthy": "所需服务状态异常"
   },
   "labels": {
     "constructor": "构造器",
+    "raw": "原始",
     "labelName": "标签名称",
     "name": "名称",
     "attributeValues": "属性值",
@@ -289,6 +363,9 @@
     "saveLabels": "保存标签",
     "resetAllChanges": "重置所有更改",
     "deleteLabel": "删除标签",
+    "addLabel": "添加标签",
+    "setupSkeleton": "配置骨架",
+    "fromModel": "从模型",
     "updateAttributes": "更新属性",
     "destroyAnnotationsConfirm": "所有相关标注将被销毁。是否继续？"
   }

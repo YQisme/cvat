@@ -5,7 +5,7 @@
 
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import dayjs from 'dayjs';
+import { formatLongDate } from 'utils/dayjs-wrapper';
 import { Row, Col } from 'antd/lib/grid';
 import Title from 'antd/lib/typography/Title';
 import Text from 'antd/lib/typography/Text';
@@ -50,9 +50,16 @@ export default function DetailsComponent(props: DetailsComponentProps): JSX.Elem
             <Row justify='space-between' className='cvat-project-description'>
                 <Col>
                     <Text type='secondary'>
-                        {`Project #${project.id} created`}
-                        {project.owner ? ` by ${project.owner.username}` : null}
-                        {` on ${dayjs(project.createdDate).format('MMMM Do YYYY')}`}
+                        {project.owner ?
+                            t('projects.createdOn', {
+                                id: project.id,
+                                owner: project.owner.username,
+                                date: formatLongDate(project.createdDate),
+                            }) :
+                            t('projects.createdOnNoOwner', {
+                                id: project.id,
+                                date: formatLongDate(project.createdDate),
+                            })}
                     </Text>
                     <MdGuideControl instanceType='project' id={project.id} />
                     <BugTrackerEditor

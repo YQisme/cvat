@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: MIT
 
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import Button from 'antd/lib/button';
 import Modal from 'antd/lib/modal';
 import Text from 'antd/lib/typography/Text';
@@ -18,6 +19,7 @@ interface Props {
 
 export default function BugTrackerEditorComponent(props: Props): JSX.Element {
     const { instance, onChange } = props;
+    const { t } = useTranslation();
 
     const [bugTracker, setBugTracker] = useState(instance.bugTracker);
     const [bugTrackerEditing, setBugTrackerEditing] = useState(false);
@@ -31,7 +33,7 @@ export default function BugTrackerEditorComponent(props: Props): JSX.Element {
             if (!shown) {
                 Modal.error({
                     title: `Could not update the ${instanceType} ${instance.id}`,
-                    content: 'Issue tracker is expected to be URL',
+                    content: t('tasks.issueTrackerUrlRequired'),
                     onOk: () => {
                         shown = false;
                     },
@@ -51,7 +53,7 @@ export default function BugTrackerEditorComponent(props: Props): JSX.Element {
             <Row className='cvat-issue-tracker'>
                 <Col>
                     <Text strong className='cvat-text-color'>
-                        Issue Tracker
+                        {t('tasks.issueTracker')}
                     </Text>
                     <Text editable={{ onChange: onChangeValue }} className='cvat-issue-tracker-value'>
                         {bugTracker}
@@ -63,7 +65,7 @@ export default function BugTrackerEditorComponent(props: Props): JSX.Element {
                         }}
                         className='cvat-open-bug-tracker-button'
                     >
-                        Open the issue
+                        {t('tasks.openIssue')}
                     </Button>
                 </Col>
             </Row>
@@ -74,7 +76,7 @@ export default function BugTrackerEditorComponent(props: Props): JSX.Element {
         <Row className='cvat-issue-tracker'>
             <Col>
                 <Text strong className='cvat-text-color'>
-                    Issue Tracker
+                    {t('tasks.issueTracker')}
                 </Text>
                 <Text
                     className='cvat-issue-tracker-value'

@@ -5,6 +5,7 @@
 import './styles.scss';
 
 import React, { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
 import { useDispatch } from 'react-redux';
 import { Row, Col } from 'antd/lib/grid';
@@ -50,6 +51,7 @@ const defaultQuantity = 5;
 
 function JobForm(props: Props): JSX.Element {
     const { task } = props;
+    const { t } = useTranslation();
     const { size: taskSize, segmentSize } = task;
     const [form] = Form.useForm();
     const dispatch = useDispatch();
@@ -207,7 +209,7 @@ function JobForm(props: Props): JSX.Element {
                                             name='frameCount'
                                             label={(
                                                 <Space>
-                                                    Frame count
+                                                    {t('jobs.frameCountLabel')}
                                                     <CVATTooltip title={description}>
                                                         <QuestionCircleOutlined
                                                             style={{ opacity: 0.5 }}

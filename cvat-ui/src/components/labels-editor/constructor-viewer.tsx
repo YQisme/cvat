@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: MIT
 
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { PlusCircleOutlined } from '@ant-design/icons';
 import Button from 'antd/lib/button';
 
@@ -21,17 +22,18 @@ function ConstructorViewer(props: ConstructorViewerProps): JSX.Element {
     const {
         onCreate, onUpdate, onDelete, labels,
     } = props;
+    const { t } = useTranslation();
     const list = [
         <Button key='create' onClick={() => onCreate('basic')} className='cvat-constructor-viewer-new-item'>
-            Add label
+            {t('labels.addLabel')}
             <PlusCircleOutlined />
         </Button>,
         <Button key='create_skeleton' onClick={() => onCreate('skeleton')} className='cvat-constructor-viewer-new-skeleton-item'>
-            Setup skeleton
+            {t('labels.setupSkeleton')}
             <PlusCircleOutlined />
         </Button>,
         <Button key='from_model' onClick={() => onCreate('model')} className='cvat-constructor-viewer-new-from-model-item'>
-            From model
+            {t('labels.fromModel')}
             <PlusCircleOutlined />
         </Button>,
     ];

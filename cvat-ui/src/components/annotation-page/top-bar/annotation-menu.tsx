@@ -19,6 +19,7 @@ import Icon from '@ant-design/icons';
 import { MenuProps } from 'antd/lib/menu';
 
 import { MainMenuIcon } from 'icons';
+import { translateJobState } from 'utils/i18n-labels';
 import { Job, JobState } from 'cvat-core-wrapper';
 import { usePlugins } from 'utils/hooks';
 
@@ -207,22 +208,22 @@ function AnnotationMenuComponent(): JSX.Element {
         label: t('annotation.changeJobState'),
         children: [{
             key: `state:${JobState.NEW}`,
-            label: JobState.NEW,
+            label: translateJobState(JobState.NEW),
             className: computeClassName(JobState.NEW),
             onClick: changeJobState(JobState.NEW),
         }, {
             key: `state:${JobState.IN_PROGRESS}`,
-            label: JobState.IN_PROGRESS,
+            label: translateJobState(JobState.IN_PROGRESS),
             className: computeClassName(JobState.IN_PROGRESS),
             onClick: changeJobState(JobState.IN_PROGRESS),
         }, {
             key: `state:${JobState.REJECTED}`,
-            label: JobState.REJECTED,
+            label: translateJobState(JobState.REJECTED),
             className: computeClassName(JobState.REJECTED),
             onClick: changeJobState(JobState.REJECTED),
         }, {
             key: `state:${JobState.COMPLETED}`,
-            label: JobState.COMPLETED,
+            label: translateJobState(JobState.COMPLETED),
             className: computeClassName(JobState.COMPLETED),
             onClick: changeJobState(JobState.COMPLETED),
         }],

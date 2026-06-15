@@ -7,6 +7,7 @@ import './styles.scss';
 import React, {
     useEffect, useState,
 } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import dayjs, { Dayjs } from 'dayjs';
@@ -47,6 +48,7 @@ function ReviewSummaryComponent({ jobInstance }: Readonly<{ jobInstance: Job }>)
     const [summary, setSummary] = useState<Record<string, any> | null>(null);
     const [error, setError] = useState<any>(null);
     const isMounted = useIsMounted();
+    const { t } = useTranslation();
 
     useEffect(() => {
         setError(null);
@@ -71,15 +73,15 @@ function ReviewSummaryComponent({ jobInstance }: Readonly<{ jobInstance: Job }>)
     if (!summary) {
         if (error) {
             if (error.toString().includes('403')) {
-                return <p>You do not have permissions</p>;
+                return <p>{t('jobs.noPermissions')}</p>;
             }
 
-            return <p>Could not fetch, check console output</p>;
+            return <p>{t('jobs.fetchFailed')}</p>;
         }
 
         return (
             <>
-                <p>Loading.. </p>
+                <p>{t('jobs.loading')}</p>
                 <LoadingOutlined />
             </>
         );
@@ -90,13 +92,13 @@ function ReviewSummaryComponent({ jobInstance }: Readonly<{ jobInstance: Job }>)
             <tbody>
                 <tr>
                     <td>
-                        <Text strong>Unsolved issues</Text>
+                        <Text strong>{t('jobs.unsolvedIssues')}</Text>
                     </td>
                     <td>{summary.issues_unsolved}</td>
                 </tr>
                 <tr>
                     <td>
-                        <Text strong>Resolved issues</Text>
+                        <Text strong>{t('jobs.resolvedIssues')}</Text>
                     </td>
                     <td>{summary.issues_resolved}</td>
                 </tr>
@@ -109,6 +111,7 @@ function JobItem(props: Readonly<Props>): JSX.Element {
     const {
         job, task, onJobUpdate, selected, onClick, onApplyFilter,
     } = props;
+    const { t } = useTranslation();
 
     const deletes = useSelector((state: CombinedState) => state.jobs.activities.deletes);
     const deleted = job.id in deletes ? deletes[job.id] === true : false;
@@ -176,13 +179,13 @@ function JobItem(props: Readonly<Props>): JSX.Element {
                     </Row>
                     <Row className='cvat-job-item-dates-info'>
                         <Col>
-                            <Text>Created: </Text>
+                            <Text>{t('jobs.created')}</Text>
                             <Text type='secondary'>{`${formatDate(created)}`}</Text>
                         </Col>
                     </Row>
                     <Row>
                         <Col>
-                            <Text>Updated: </Text>
+                            <Text>{t('jobs.updated')}</Text>
                             <Text type='secondary'>{`${formatDate(updated)}`}</Text>
                         </Col>
                     </Row>
@@ -193,7 +196,7 @@ function JobItem(props: Readonly<Props>): JSX.Element {
                             <Row>
                                 <Col className='cvat-job-item-select'>
                                     <Row>
-                                        <Text>Assignee:</Text>
+                                        <Text>{t('common.assignee')}:</Text>
                                     </Row>
                                     <UserSelector
                                         className='cvat-job-assignee-selector'
@@ -207,7 +210,7 @@ function JobItem(props: Readonly<Props>): JSX.Element {
                                 <Col className='cvat-job-item-select'>
                                     <Row justify='space-between' align='middle'>
                                         <Col>
-                                            <Text>Stage:</Text>
+                                            <Text>{t('common.stage')}:</Text>
                                         </Col>
                                     </Row>
                                     <JobStageSelector
@@ -220,7 +223,7 @@ function JobItem(props: Readonly<Props>): JSX.Element {
                                 <Col className='cvat-job-item-select'>
                                     <Row justify='space-between' align='middle'>
                                         <Col>
-                                            <Text>State:</Text>
+                                            <Text>{t('common.state')}:</Text>
                                         </Col>
                                     </Row>
                                     <JobStateSelector
@@ -240,7 +243,7 @@ function JobItem(props: Readonly<Props>): JSX.Element {
                             <Row>
                                 <Col>
                                     <Icon component={DurationIcon} />
-                                    <Text>Duration: </Text>
+                                    <Text>{t('jobs.duration')}</Text>
                                     <Text type='secondary'>
                                         {`${dayjs
                                             .duration(now.diff(created))
@@ -251,7 +254,7 @@ function JobItem(props: Readonly<Props>): JSX.Element {
                             <Row>
                                 <Col>
                                     <BorderOutlined />
-                                    <Text>Frame count: </Text>
+                                    <Text>{t('jobs.frameCount')}</Text>
                                     <Text type='secondary' className='cvat-job-item-frames'>
                                         {`${job.frameCount} (${frameCountPercentRepresentation}%)`}
                                     </Text>
@@ -261,7 +264,7 @@ function JobItem(props: Readonly<Props>): JSX.Element {
                                 <Row>
                                     <Col>
                                         <Icon component={FramesIcon} />
-                                        <Text>Frame range: </Text>
+                                        <Text>{t('jobs.frameRange')}</Text>
                                         <Text type='secondary' className='cvat-job-item-frame-range'>
                                             {`${job.startFrame}-${job.stopFrame}`}
                                         </Text>

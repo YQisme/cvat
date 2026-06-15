@@ -22,6 +22,7 @@ import ResetPasswordPageConfirmComponent from 'components/reset-password-confirm
 import ResetPasswordPageComponent from 'components/reset-password-page/reset-password-page';
 
 import Header from 'components/header/header';
+import i18n from 'i18n';
 import GlobalErrorBoundary from 'components/global-error-boundary/global-error-boundary';
 
 import ShortcutsDialog from 'components/shortcuts-dialog/shortcuts-dialog';
@@ -631,7 +632,7 @@ class CVATApplication extends React.PureComponent<CVATAppProps & RouteComponentP
                 <Space align='center' direction='vertical' className='cvat-spinner cvat-server-unavailable'>
                     <DisconnectOutlined className='cvat-disconnected' />
                     <Text className='cvat-server-unavailable-title' strong>
-                        Cannot connect to the server
+                        {i18n.t('common.cannotConnect')}
                     </Text>
                     <ServerUnavailableComponent details={healthCheckError} />
                 </Space>
@@ -639,7 +640,7 @@ class CVATApplication extends React.PureComponent<CVATAppProps & RouteComponentP
         }
 
         return (
-            <Spin size='large' fullscreen className='cvat-spinner' tip='Connecting...' />
+            <Spin size='large' fullscreen className='cvat-spinner' tip={i18n.t('common.connecting')} />
         );
     }
 }

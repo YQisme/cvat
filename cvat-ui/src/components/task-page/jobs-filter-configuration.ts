@@ -95,7 +95,7 @@ export const config: Partial<Config> = {
 export const localStorageRecentCapacity = 10;
 export const localStorageRecentKeyword = 'recentlyAppliedJobsFilters';
 export const predefinedFilterValues = {
-    'Assigned to me': '{"and":[{"==":[{"var":"assignee"},"<username>"]}]}',
-    'Not completed': '{"!":{"or":[{"==":[{"var":"state"},"completed"]},{"==":[{"var":"stage"},"acceptance"]}]}}',
-    'Not a replica': '{"and":[{"!":{"var":"parent_job_id"}}]}',
+    assignedToMe: '{"and":[{"==":[{"var":"assignee"},"<username>"]}]}',
+    notCompleted: '{"!":{"or":[{"==":[{"var":"state"},"completed"]},{"==":[{"var":"stage"},"acceptance"]}]}}',
+    notAReplica: '{"and":[{"!":{"var":"parent_job_id"}}]}',
 };

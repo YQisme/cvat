@@ -11,7 +11,7 @@ import Card from 'antd/lib/card';
 import Descriptions from 'antd/lib/descriptions';
 import { MoreOutlined } from '@ant-design/icons';
 
-import { Job, JobType } from 'cvat-core-wrapper';
+import { translateJobStage, translateJobState } from 'utils/i18n-labels';
 import { useCardHeightHOC, useContextMenuClick } from 'utils/hooks';
 import Preview from 'components/common/preview';
 import { CombinedState } from 'reducers';
@@ -64,11 +64,11 @@ function JobCardComponent(props: Readonly<Props>): JSX.Element {
 
     let tag = null;
     if (job.type === JobType.GROUND_TRUTH) {
-        tag = 'Ground truth';
+        tag = t('jobs.groundTruth');
     } else if (job.replicasCount > 0) {
-        tag = 'Parent';
+        tag = t('jobs.parent');
     } else if (job.parentJobId !== null) {
-        tag = 'Replica';
+        tag = t('jobs.replica');
     }
 
     const cardClassName = `cvat-job-page-list-item${selected ? ' cvat-item-selected' : ''}`;
@@ -102,7 +102,9 @@ function JobCardComponent(props: Readonly<Props>): JSX.Element {
             onContextMenuCapture={handleContextMenuCapture}
         >
             <Descriptions column={1} size='small'>
-                <Descriptions.Item label={t('jobs.stageAndState')}>{`${job.stage} ${job.state}`}</Descriptions.Item>
+                <Descriptions.Item label={t('jobs.stageAndState')}>
+                    {`${translateJobStage(job.stage)} ${translateJobState(job.state)}`}
+                </Descriptions.Item>
                 <Descriptions.Item label={t('jobs.frames')}>{job.stopFrame - job.startFrame + 1}</Descriptions.Item>
                 {job.assignee ? (
                     <Descriptions.Item label={t('common.assignee')}>{job.assignee.username}</Descriptions.Item>

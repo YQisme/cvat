@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: MIT
 
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import {
     OrderedListOutlined, SortAscendingOutlined, SortDescendingOutlined,
@@ -13,6 +14,7 @@ import Popover from 'antd/lib/popover';
 import Radio from 'antd/lib/radio';
 
 import CVATTooltip from 'components/common/cvat-tooltip';
+import i18n from 'i18n';
 
 interface Props {
     sortingFields: string[];
@@ -58,7 +60,11 @@ const SortableItem = SortableElement<SortableItemProps>(
             <div className='cvat-sorting-field'>
                 <Radio.Button disabled={valueIndex > anchorIndex}>{value}</Radio.Button>
                 <div>
-                    <CVATTooltip overlay={appliedSorting[value]?.startsWith('-') ? 'Descending sort' : 'Ascending sort'}>
+                    <CVATTooltip overlay={
+                        appliedSorting[value]?.startsWith('-') ?
+                            i18n.t('resource.descendingSort') :
+                            i18n.t('resource.ascendingSort')
+                    }>
                         <Button className='cvat-switch-sort-order-button' type='text' disabled={!isActiveField} onClick={onClick}>
                             {
                                 isDescendingField ? (
@@ -104,6 +110,7 @@ function SortingModalComponent(props: Props): JSX.Element {
         sortingFields: sortingFieldsProp,
         defaultFields, visible, onApplySorting, onVisibleChange, disabled,
     } = props;
+    const { t } = useTranslation();
     const [appliedSorting, setAppliedSorting] = useState<Record<string, string>>(
         defaultFields.reduce((acc: Record<string, string>, field: string) => {
             const [isAscending, absField] = field.startsWith('-') ?
@@ -205,7 +212,7 @@ function SortingModalComponent(props: Props): JSX.Element {
                 type='default'
                 onClick={() => onVisibleChange(!visible)}
             >
-                Sort by
+                {t('resource.sortBy')}
                 <OrderedListOutlined />
             </Button>
         </Popover>

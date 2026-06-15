@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: MIT
 
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { shallowEqual } from 'utils/redux';
 import {
@@ -134,6 +135,7 @@ const getKeypointAttributesSubfields = (labels: Label[]): Record<string, any> =>
 };
 
 function FiltersModalComponent(): JSX.Element {
+    const { t } = useTranslation();
     const { labels, activeFilters, visible } = useSelector(
         (state: CombinedState) => ({
             labels: state.annotation.job.labels,
@@ -447,14 +449,14 @@ function FiltersModalComponent(): JSX.Element {
                     onClick={() => applyFilters([])}
                     className='cvat-filters-modal-clear-button'
                 >
-                    Clear filters
+                    {t('resource.clearFilters')}
                 </Button>,
                 <Button
                     key='cancel'
                     onClick={() => dispatch(showFilters(false))}
                     className='cvat-filters-modal-cancel-button'
                 >
-                    Cancel
+                    {t('common.cancel')}
                 </Button>,
                 <Button
                     key='submit'
@@ -463,7 +465,7 @@ function FiltersModalComponent(): JSX.Element {
                     onClick={confirmModal}
                     className='cvat-filters-modal-submit-button'
                 >
-                    Submit
+                    {t('common.submit')}
                 </Button>,
             ]}
         >

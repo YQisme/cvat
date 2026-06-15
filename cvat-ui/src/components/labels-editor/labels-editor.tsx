@@ -11,6 +11,7 @@ import modal from 'antd/lib/modal';
 import { EditOutlined, BuildOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 
 import { SerializedLabel, SerializedAttribute } from 'cvat-core-wrapper';
+import i18n from 'i18n';
 import RawViewer from './raw-viewer';
 import ConstructorViewer from './constructor-viewer';
 import ConstructorCreator from './constructor-creator';
@@ -298,7 +299,7 @@ export default class LabelsEditor extends React.PureComponent<LabelsEditorProps,
                     label: (
                         <span>
                             <EditOutlined />
-                            <Text>Raw</Text>
+                            <Text>{i18n.t('labels.raw')}</Text>
                         </span>
                     ),
                     children: <RawViewer key='raw' labels={savedAndUnsavedLabels} onSubmit={this.handleRawSubmit} />,
@@ -307,7 +308,7 @@ export default class LabelsEditor extends React.PureComponent<LabelsEditorProps,
                     label: (
                         <span>
                             <BuildOutlined />
-                            <Text>Constructor</Text>
+                            <Text>{i18n.t('labels.constructor')}</Text>
                         </span>
                     ),
                     children: configuratorContent,

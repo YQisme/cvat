@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: MIT
 
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
     Builder, Config, AntdConfig, ImmutableTree, Query, Utils as QbUtils,
 } from '@react-awesome-query-builder/antd';
@@ -19,6 +20,8 @@ import Menu from 'antd/lib/menu';
 import { useSelector } from 'react-redux';
 import { CombinedState } from 'reducers';
 import { User } from 'cvat-core-wrapper';
+import i18n from 'i18n';
+import { translatePredefinedFilter } from 'utils/i18n-labels';
 
 interface ResourceFilterProps {
     predefinedVisible?: boolean;
@@ -38,9 +41,21 @@ export default function ResourceFilterHOC(
     localStorageRecentCapacity: number,
     predefinedFilterValues?: Record<string, string>,
 ): React.FunctionComponent<ResourceFilterProps> {
-    const config: Config = { ...AntdConfig, ...filtrationCfg };
+    function buildConfig(filtrationCfg: Partial<Config>): Config {
+        return {
+            ...AntdConfig,
+            ...filtrationCfg,
+            settings: {
+                ...AntdConfig.settings,
+                ...(filtrationCfg.settings || {}),
+                addRuleLabel: i18n.t('resource.addRule'),
+                addGroupLabel: i18n.t('resource.addGroup'),
+            },
+        };
+    }
+
     const defaultTree = QbUtils.checkTree(
-        QbUtils.loadTree({ id: QbUtils.uuid(), type: 'group' }), config,
+        QbUtils.loadTree({ id: QbUtils.uuid(), type: 'group' }), buildConfig(filtrationCfg),
     ) as ImmutableTree;
 
     function keepFilterInLocalStorage(filter: string): void {
@@ -87,7 +102,7 @@ export default function ResourceFilterHOC(
         built: null,
     };
 
-    function isValidTree(tree: ImmutableTree): boolean {
+    function isValidTree(tree: ImmutableTree, config: Config): boolean {
         return (QbUtils.queryString(tree, config) || '').trim().length > 0 && QbUtils.isValidTree(tree, config);
     }
 
@@ -138,6 +153,11 @@ export default function ResourceFilterHOC(
         } = props;
 
         const user = useSelector((state: CombinedState) => state.auth.user);
+        const { t, i18n: i18nInstance } = useTranslation();
+        const config = React.useMemo(
+            () => buildConfig(filtrationCfg),
+            [i18nInstance.language],
+        );
         const [isMounted, setIsMounted] = useState<boolean>(false);
         const [recentFilters, setRecentFilters] = useState<Record<string, string>>({});
         const [appliedFilter, setAppliedFilter] = useState(defaultAppliedFilter);
@@ -152,7 +172,7 @@ export default function ResourceFilterHOC(
             try {
                 if (value && value !== '{}') {
                     const tree = QbUtils.loadFromJsonLogic(JSON.parse(value), config);
-                    if (tree && isValidTree(tree)) {
+                    if (tree && isValidTree(tree, config)) {
                         setAppliedFilter({
                             ...appliedFilter,
                             predefined: splitFilterIntoPredefined(Object.values(predefinedFilters), value),
@@ -203,7 +223,7 @@ export default function ResourceFilterHOC(
             } else if (appliedFilter.recent) {
                 onApplyFilter(appliedFilter.recent);
                 const tree = QbUtils.loadFromJsonLogic(JSON.parse(appliedFilter.recent), config);
-                if (tree && isValidTree(tree)) {
+                if (tree && isValidTree(tree, config)) {
                     setState(tree);
                 }
             } else if (appliedFilter.built) {
@@ -260,7 +280,7 @@ export default function ResourceFilterHOC(
                                             }}
                                             key={key}
                                         >
-                                            {key}
+                                            {translatePredefinedFilter(key)}
                                         </Checkbox>
                                     )) }
                                 </div>
@@ -271,7 +291,7 @@ export default function ResourceFilterHOC(
                                 type='default'
                                 onClick={() => onPredefinedVisibleChange(!predefinedVisible)}
                             >
-                                Quick filters
+                                {t('resource.quickFilters')}
                                 { appliedFilter.predefined ?
                                     <FilterFilled /> :
                                     <FilterOutlined />}
@@ -332,7 +352,7 @@ export default function ResourceFilterHOC(
                                             () => onRecentVisibleChange(!recentVisible)
                                         }
                                     >
-                                        Recent
+                                        {t('resource.recent')}
                                         <DownOutlined />
                                     </Button>
                                 </Popover>
@@ -360,7 +380,7 @@ export default function ResourceFilterHOC(
                                         });
                                     }}
                                 >
-                                    Reset
+                                    {t('resource.reset')}
                                 </Button>
                                 <Button
                                     className='cvat-apply-filters-button'
@@ -379,7 +399,7 @@ export default function ResourceFilterHOC(
                                         });
                                     }}
                                 >
-                                    Apply
+                                    {t('resource.apply')}
                                 </Button>
                             </Space>
                         </div>
@@ -391,7 +411,7 @@ export default function ResourceFilterHOC(
                         type='default'
                         onClick={() => onBuilderVisibleChange(!builderVisible)}
                     >
-                        Filter
+                        {t('resource.filter')}
                         { appliedFilter.built || appliedFilter.recent ?
                             <FilterFilled /> :
                             <FilterOutlined />}
@@ -404,7 +424,7 @@ export default function ResourceFilterHOC(
                     type='link'
                     onClick={() => { setAppliedFilter({ ...defaultAppliedFilter }); }}
                 >
-                    Clear filters
+                    {t('resource.clearFilters')}
                 </Button>
             </div>
         );

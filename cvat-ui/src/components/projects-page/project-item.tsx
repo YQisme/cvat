@@ -4,7 +4,8 @@
 // SPDX-License-Identifier: MIT
 
 import React, { useCallback } from 'react';
-import dayjs from 'dayjs';
+import { useTranslation } from 'react-i18next';
+import { formatFromNow } from 'utils/dayjs-wrapper';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import Text from 'antd/lib/typography/Text';
@@ -41,12 +42,13 @@ export default function ProjectItemComponent(props: Props): JSX.Element {
         onClick,
     } = props;
 
+    const { t } = useTranslation();
     const history = useHistory();
     const ribbonPlugins = usePlugins((state: CombinedState) => state.plugins.components.projectItem.ribbon, props);
     const height = useCardHeight();
     const { itemRef, handleContextMenuClick, handleContextMenuCapture } = useContextMenuClick<HTMLDivElement>();
     const ownerName = instance.owner ? instance.owner.username : null;
-    const updated = dayjs(instance.updatedDate).fromNow();
+    const updated = formatFromNow(instance.updatedDate);
     const deletes = useSelector((state: CombinedState) => state.projects.activities.deletes);
     const deleted = instance.id in deletes ? deletes[instance.id] : false;
 
@@ -102,13 +104,12 @@ export default function ProjectItemComponent(props: Props): JSX.Element {
                             {ownerName && (
                                 <>
                                     <Text type='secondary'>
-                                        Created
-                                        {ownerName ? ` by ${ownerName}` : ''}
+                                        {t('projects.createdBy', { owner: ownerName })}
                                     </Text>
                                     <br />
                                 </>
                             )}
-                            <Text type='secondary'>{`Last updated ${updated}`}</Text>
+                            <Text type='secondary'>{t('projects.lastUpdated', { time: updated })}</Text>
                         </div>
                         <div>
                             <Button

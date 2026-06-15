@@ -4,8 +4,9 @@
 // SPDX-License-Identifier: MIT
 
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import dayjs from 'dayjs';
+import { formatFromNow, formatLongDate } from 'utils/dayjs-wrapper';
 import Text from 'antd/lib/typography/Text';
 import { Row, Col } from 'antd/lib/grid';
 import Button from 'antd/lib/button';
@@ -51,13 +52,14 @@ function TaskItemComponent(props: TaskItemProps): JSX.Element {
         onClick,
     } = props;
 
+    const { t } = useTranslation();
     const isMounted = useIsMounted();
     const { itemRef, handleContextMenuClick, handleContextMenuCapture } = useContextMenuClick<HTMLDivElement>();
 
     const [importingState, setImportingState] = useState<ImportingState | null>(
         taskInstance.size > 0 ? null : {
             state: null,
-            message: 'Request current progress',
+            message: t('tasks.requestCurrentProgress'),
             progress: 0,
         },
     );
@@ -105,8 +107,8 @@ function TaskItemComponent(props: TaskItemProps): JSX.Element {
 
     const { id } = taskInstance;
     const owner = taskInstance.owner ? taskInstance.owner.username : null;
-    const updated = dayjs(taskInstance.updatedDate).fromNow();
-    const created = dayjs(taskInstance.createdDate).format('MMMM Do YYYY');
+    const updated = formatFromNow(taskInstance.updatedDate);
+    const created = formatLongDate(taskInstance.createdDate);
 
     const ribbonItems = ribbonPlugins
         .filter((plugin) => plugin.data.shouldBeRendered(props, { importingState }))
@@ -150,21 +152,21 @@ function TaskItemComponent(props: TaskItemProps): JSX.Element {
                         <div>
                             {numOfCompleted > 0 && (
                                 <Text strong className='cvat-task-completed-progress'>
-                                    {`\u2022 ${numOfCompleted} done `}
+                                    {t('tasks.jobsProgressDone', { count: numOfCompleted })}
                                 </Text>
                             )}
                             {numOfValidation > 0 && (
                                 <Text strong className='cvat-task-validation-progress'>
-                                    {`\u2022 ${numOfValidation} on review `}
+                                    {t('tasks.jobsProgressOnReview', { count: numOfValidation })}
                                 </Text>
                             )}
                             {numOfAnnotation > 0 && (
                                 <Text strong className='cvat-task-annotation-progress'>
-                                    {`\u2022 ${numOfAnnotation} annotating `}
+                                    {t('tasks.jobsProgressAnnotating', { count: numOfAnnotation })}
                                 </Text>
                             )}
                             <Text strong type='secondary'>
-                                {`\u2022 ${numOfJobs} total`}
+                                {t('tasks.jobsProgressTotal', { count: numOfJobs })}
                             </Text>
                         </div>
                         <Progress
@@ -212,11 +214,13 @@ function TaskItemComponent(props: TaskItemProps): JSX.Element {
                 <br />
                 {owner && (
                     <>
-                        <Text type='secondary'>{`Created ${owner ? `by ${owner}` : ''} on ${created}`}</Text>
+                        <Text type='secondary'>
+                            {t('tasks.createdByOn', { owner, date: created })}
+                        </Text>
                         <br />
                     </>
                 )}
-                <Text type='secondary'>{`Last updated ${updated}`}</Text>
+                <Text type='secondary'>{t('tasks.lastUpdated', { time: updated })}</Text>
             </Col>
             {renderProgress()}
             <Col span={3}>
@@ -230,7 +234,7 @@ function TaskItemComponent(props: TaskItemProps): JSX.Element {
                                 size='large'
                                 ghost
                             >
-                                Open
+                                {t('tasks.open')}
                             </Button>
                         </Link>
                     </Col>
@@ -241,7 +245,7 @@ function TaskItemComponent(props: TaskItemProps): JSX.Element {
                             onClick={handleContextMenuClick}
                             className='cvat-task-item-actions-button cvat-actions-menu-button'
                         >
-                            <Text className='cvat-text-color'>Actions</Text>
+                            <Text className='cvat-text-color'>{t('common.actions')}</Text>
                             <MoreOutlined className='cvat-menu-icon' />
                         </div>
                     </Col>

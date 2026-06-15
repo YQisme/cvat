@@ -4,6 +4,7 @@
 
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
+import { setDayjsLocale } from 'utils/dayjs-wrapper';
 import zhCN from './locales/zh-CN.json';
 import en from './locales/en.json';
 
@@ -34,7 +35,10 @@ i18n.use(initReactI18next).init({
 
 export function setLocale(locale: SupportedLocale): void {
     localStorage.setItem(LOCALE_STORAGE_KEY, locale);
+    setDayjsLocale(locale);
     void i18n.changeLanguage(locale);
 }
+
+setDayjsLocale(getStoredLocale());
 
 export default i18n;

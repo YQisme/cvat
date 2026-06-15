@@ -73,6 +73,7 @@
     "close": "Close",
     "save": "Save",
     "saving": "Saving...",
+    "submit": "Submit",
     "assignedTo": "Assigned to",
     "assignee": "Assignee",
     "organization": "Organization",
@@ -106,7 +107,16 @@
     "goToProject": "Go to the project",
     "goToParent": "Go to parent",
     "goToReplicas": "Go to replicas",
-    "goToBugTracker": "Go to the bug tracker"
+    "goToBugTracker": "Go to the bug tracker",
+    "edit": "Edit",
+    "subset": "Subset",
+    "backToTasks": "Back to tasks",
+    "backToProject": "Back to project",
+    "backToProjects": "Back to projects",
+    "backToOrganization": "Back to organization",
+    "backToWebhooks": "Back to webhooks",
+    "connecting": "Connecting...",
+    "cannotConnect": "Cannot connect to the server"
   },
   "empty": {
     "noSearchResults": "No results matched your search...",
@@ -140,10 +150,28 @@
     "unknownStatus": "Unknown status received",
     "cancelAutoAnnotation": "Cancel automatic annotation",
     "cancelAutoAnnotationConfirm": "You are going to cancel automatic annotation?",
-    "cancelAutoAnnotationContent": "Reached progress will be lost. Continue?"
+    "cancelAutoAnnotationContent": "Reached progress will be lost. Continue?",
+    "open": "Open",
+    "jobsProgressDone": "• {{count}} done ",
+    "jobsProgressOnReview": "• {{count}} on review ",
+    "jobsProgressAnnotating": "• {{count}} annotating ",
+    "jobsProgressTotal": "• {{count}} total",
+    "createdByOn": "Created by {{owner}} on {{date}}",
+    "createdOn": "Created on {{date}}",
+    "taskCreatedByOn": "Task #{{id}} Created by {{owner}} on {{date}}",
+    "lastUpdated": "Last updated {{time}}",
+    "requestCurrentProgress": "Request current progress",
+    "issueTracker": "Issue Tracker",
+    "openIssue": "Open the issue",
+    "issueTrackerUrlRequired": "Issue tracker is expected to be URL"
   },
   "projects": {
-    "createNewProject": "Create a new project"
+    "createNewProject": "Create a new project",
+    "createdBy": "Created by {{owner}}",
+    "created": "Created",
+    "lastUpdated": "Last updated {{time}}",
+    "createdOn": "Project #{{id}} created by {{owner}} on {{date}}",
+    "createdOnNoOwner": "Project #{{id}} created on {{date}}"
   },
   "jobs": {
     "stageAndState": "Stage and state",
@@ -152,8 +180,18 @@
     "fetchFailed": "Could not fetch, check console output",
     "unsolvedIssues": "Unsolved issues",
     "resolvedIssues": "Resolved issues",
+    "duration": "Duration: ",
+    "created": "Created: ",
+    "updated": "Updated: ",
+    "loading": "Loading.. ",
     "frameCount": "Frame count: ",
-    "frameRange": "Frame range: "
+    "frameCountLabel": "Frame count",
+    "frameRange": "Frame range: ",
+    "title": "Jobs",
+    "noJobsFound": "No jobs found",
+    "groundTruth": "Ground truth",
+    "parent": "Parent",
+    "replica": "Replica"
   },
   "cloudStorage": {
     "createCloudStorage": "Create a cloud storage"
@@ -276,12 +314,48 @@
   "requests": {
     "lightweightBackup": "Lightweight backup"
   },
+  "resource": {
+    "sortBy": "Sort by",
+    "quickFilters": "Quick filters",
+    "filter": "Filter",
+    "clearFilters": "Clear filters",
+    "reset": "Reset",
+    "apply": "Apply",
+    "recent": "Recent",
+    "ascendingSort": "Ascending sort",
+    "descendingSort": "Descending sort",
+    "addRule": "Add rule",
+    "addGroup": "Add group",
+    "predefinedFilters": {
+      "assignedToMe": "Assigned to me",
+      "ownedByMe": "Owned by me",
+      "notCompleted": "Not completed",
+      "notAReplica": "Not a replica"
+    }
+  },
+  "jobStage": {
+    "annotation": "Annotation",
+    "validation": "Validation",
+    "acceptance": "Acceptance"
+  },
+  "jobState": {
+    "new": "New",
+    "in progress": "In progress",
+    "completed": "Completed",
+    "rejected": "Rejected"
+  },
+  "guide": {
+    "taskDescription": "Task description",
+    "projectDescription": "Project description",
+    "edit": "Edit"
+  },
   "server": {
     "connectionCheckFailed": "Connection check failed",
     "servicesNotHealthy": "Required services are not healthy"
   },
   "labels": {
     "constructor": "Constructor",
+    "raw": "Raw",
     "labelName": "Label name",
     "name": "Name",
     "attributeValues": "Attribute values",
@@ -289,6 +363,9 @@
     "saveLabels": "Save labels",
     "resetAllChanges": "Reset all changes",
     "deleteLabel": "Delete label",
+    "addLabel": "Add label",
+    "setupSkeleton": "Setup skeleton",
+    "fromModel": "From model",
     "updateAttributes": "Update attributes",
     "destroyAnnotationsConfirm": "All related annotations will be destroyed. Continue?"
   }

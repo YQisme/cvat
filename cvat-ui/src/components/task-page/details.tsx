@@ -5,7 +5,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import dayjs from 'dayjs';
+import { formatLongDate } from 'utils/dayjs-wrapper';
 
 import { Row, Col } from 'antd/lib/grid';
 import Text from 'antd/lib/typography/Text';
@@ -131,7 +131,7 @@ class DetailsComponent extends React.PureComponent<Props, State> {
         const { consensusEnabled } = this.state;
         const owner = taskInstance.owner ? taskInstance.owner.username : null;
         const assignee = taskInstance.assignee ? taskInstance.assignee : null;
-        const created = dayjs(taskInstance.createdDate).format('MMMM Do YYYY');
+        const created = formatLongDate(taskInstance.createdDate);
         const assigneeSelect = (
             <UserSelector
                 value={assignee}
@@ -150,7 +150,11 @@ class DetailsComponent extends React.PureComponent<Props, State> {
                         {owner && (
                             <div>
                                 <Text type='secondary'>
-                                    {`Task #${taskInstance.id} Created by ${owner} on ${created}`}
+                                    {i18n.t('tasks.taskCreatedByOn', {
+                                        id: taskInstance.id,
+                                        owner,
+                                        date: created,
+                                    })}
                                 </Text>
                             </div>
                         )}
@@ -198,7 +202,7 @@ class DetailsComponent extends React.PureComponent<Props, State> {
         return (
             <Row>
                 <Col span={24}>
-                    <Text className='cvat-text-color'>Subset:</Text>
+                    <Text className='cvat-text-color cvat-task-details-subset'>{i18n.t('common.subset')}:</Text>
                 </Col>
                 <Col span={24}>
                     <ProjectSubsetField
