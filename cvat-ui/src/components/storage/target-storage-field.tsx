@@ -4,6 +4,7 @@
 
 import './styles.scss';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { StorageData, StorageLocation } from 'cvat-core-wrapper';
 import StorageWithSwitchField from './storage-with-switch-field';
 
@@ -21,6 +22,7 @@ export interface Props {
 }
 
 export default function TargetStorageField(props: Readonly<Props>): JSX.Element {
+    const { t } = useTranslation();
     const {
         instanceId,
         locationValue,
@@ -38,7 +40,7 @@ export default function TargetStorageField(props: Readonly<Props>): JSX.Element 
         <StorageWithSwitchField
             instanceId={instanceId}
             locationValue={locationValue}
-            storageLabel='Target storage'
+            storageLabel={t('createTask.targetStorage')}
             storageName='targetStorage'
             switchName='useProjectTargetStorage'
             useDefaultStorage={useDefaultStorage}

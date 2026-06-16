@@ -23,6 +23,7 @@ import ResetPasswordPageComponent from 'components/reset-password-page/reset-pas
 
 import Header from 'components/header/header';
 import i18n from 'i18n';
+import { translateNotificationDescription, translateNotificationMessage } from 'utils/i18n-labels';
 import GlobalErrorBoundary from 'components/global-error-boundary/global-error-boundary';
 
 import ShortcutsDialog from 'components/shortcuts-dialog/shortcuts-dialog';
@@ -385,12 +386,15 @@ class CVATApplication extends React.PureComponent<CVATAppProps & RouteComponentP
     private showMessages(): void {
         const { notifications, resetMessages, history } = this.props;
         function showMessage(notificationState: NotificationState): void {
+            const message = translateNotificationMessage(notificationState.message);
+            const description = notificationState?.description ?
+                translateNotificationDescription(notificationState.description) : undefined;
             notification.info({
                 message: (
-                    <CVATMarkdown history={history}>{notificationState.message}</CVATMarkdown>
+                    <CVATMarkdown history={history}>{message}</CVATMarkdown>
                 ),
-                description: notificationState?.description && (
-                    <CVATMarkdown history={history}>{notificationState?.description}</CVATMarkdown>
+                description: description && (
+                    <CVATMarkdown history={history}>{description}</CVATMarkdown>
                 ),
                 duration: notificationState.duration ?? null,
                 className: notificationState.className,

@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: MIT
 
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import Alert from 'antd/lib/alert';
 import Progress from 'antd/lib/progress';
 import Row from 'antd/lib/row';
@@ -21,6 +22,7 @@ interface Props {
 }
 
 export default function MultiTasksProgress(props: Props): JSX.Element {
+    const { t } = useTranslation();
     const {
         tasks: items,
         onOk,
@@ -66,26 +68,26 @@ export default function MultiTasksProgress(props: Props): JSX.Element {
                     {percent === 100 ? (
                         <Row className='cvat-create-multi-tasks-state'>
                             <Col>
-                                Finished
+                                {t('createTask.finished')}
                             </Col>
                         </Row>
                     ) : null}
                     <Row className='cvat-create-multi-tasks-progress'>
                         <Col>
-                            {`Pending: ${countPending} `}
+                            {`${t('createTask.pending')}: ${countPending} `}
                         </Col>
                         <Col offset={1}>
-                            {`Progress: ${countProgress} `}
+                            {`${t('createTask.progress')}: ${countProgress} `}
                         </Col>
                         <Col offset={1}>
-                            {`Completed: ${countCompleted} `}
+                            {`${t('createTask.completed')}: ${countCompleted} `}
                         </Col>
                         <Col offset={1}>
-                            {`Failed: ${countFailed} `}
+                            {`${t('createTask.failed')}: ${countFailed} `}
                         </Col>
-                        {countCancelled ? (<Col offset={1}>{`Cancelled: ${countCancelled} `}</Col>) : null}
+                        {countCancelled ? (<Col offset={1}>{`${t('createTask.cancelled')}: ${countCancelled} `}</Col>) : null}
                         <Col offset={1}>
-                            {`Total: ${countAll}.`}
+                            {`${t('createTask.total')}: ${countAll}.`}
                         </Col>
                     </Row>
                     <Progress
@@ -105,7 +107,7 @@ export default function MultiTasksProgress(props: Props): JSX.Element {
                                 }}
                                 items={[{
                                     key: 'appearance',
-                                    label: <Text strong> Failed files </Text>,
+                                    label: <Text strong>{t('createTask.failedFiles')}</Text>,
                                     children: (
                                         <List
                                             size='small'
@@ -127,7 +129,7 @@ export default function MultiTasksProgress(props: Props): JSX.Element {
                                             disabled={!countFailed}
                                             onClick={onRetryFailedTasks}
                                         >
-                                            Retry failed tasks
+                                            {t('createTask.retryFailedTasks')}
                                         </Button>
                                     </Col>
                                     {
@@ -138,7 +140,7 @@ export default function MultiTasksProgress(props: Props): JSX.Element {
                                                     disabled={!countCancelled}
                                                     onClick={onRetryCancelledTasks}
                                                 >
-                                                    Retry cancelled tasks
+                                                    {t('createTask.retryCancelledTasks')}
                                                 </Button>
                                             </Col>
                                         ) : null
@@ -149,7 +151,7 @@ export default function MultiTasksProgress(props: Props): JSX.Element {
                                             type='primary'
                                             onClick={onOk}
                                         >
-                                            Ok
+                                            {t('createTask.ok')}
                                         </Button>
                                     </Col>
                                 </>
@@ -160,7 +162,7 @@ export default function MultiTasksProgress(props: Props): JSX.Element {
                                         onClick={onCancel}
                                         disabled={!countPending}
                                     >
-                                        Cancel pending tasks
+                                        {t('createTask.cancelPendingTasks')}
                                     </Button>
                                 </Col>
                             )}

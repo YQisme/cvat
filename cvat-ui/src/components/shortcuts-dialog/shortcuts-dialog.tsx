@@ -6,10 +6,12 @@
 import Modal from 'antd/lib/modal';
 import Table from 'antd/lib/table';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { getApplicationKeyMap } from 'utils/mousetrap-react';
 import { shortcutsActions } from 'actions/shortcuts-actions';
 import { CombinedState } from 'reducers';
+import { translateShortcutDescription, translateShortcutName } from 'utils/i18n-labels';
 
 interface StateToProps {
     visible: boolean;
@@ -41,6 +43,7 @@ function mapDispatchToProps(dispatch: any): DispatchToProps {
 
 function ShortcutsDialog(props: StateToProps & DispatchToProps): JSX.Element | null {
     const { visible, switchShortcutsModalVisible } = props;
+    const { t } = useTranslation();
     const keyMap = getApplicationKeyMap();
 
     const splitToRows = (data: string[]): JSX.Element[] => data.map(
@@ -54,18 +57,18 @@ function ShortcutsDialog(props: StateToProps & DispatchToProps): JSX.Element | n
 
     const columns = [
         {
-            title: 'Name',
+            title: t('settings.shortcutsColumnName'),
             dataIndex: 'name',
             key: 'name',
         },
         {
-            title: 'Shortcut',
+            title: t('settings.shortcutsColumnShortcut'),
             dataIndex: 'shortcut',
             key: 'shortcut',
             render: splitToRows,
         },
         {
-            title: 'Description',
+            title: t('settings.shortcutsColumnDescription'),
             dataIndex: 'description',
             key: 'description',
         },
@@ -75,14 +78,14 @@ function ShortcutsDialog(props: StateToProps & DispatchToProps): JSX.Element | n
         .filter((key: string) => (!keyMap[key].nonActive))
         .map((key: string, id: number) => ({
             key: id,
-            name: keyMap[key].name || key,
-            description: keyMap[key].description || '',
+            name: translateShortcutName(key, keyMap[key].name || key),
+            description: translateShortcutDescription(key, keyMap[key].description || ''),
             shortcut: keyMap[key].sequences,
         }));
 
     return (
         <Modal
-            title='Active list of shortcuts'
+            title={t('settings.shortcutsDialogTitle')}
             open={visible}
             closable={false}
             width={800}

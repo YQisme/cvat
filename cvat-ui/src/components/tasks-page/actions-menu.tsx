@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: MIT
 
 import React, { useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { shallowEqual } from 'utils/redux';
 import { useHistory } from 'react-router';
@@ -45,6 +46,7 @@ function TaskActionsComponent(props: Readonly<Props>): JSX.Element {
     } = props;
     const history = useHistory();
     const dispatch = useDispatch();
+    const { t } = useTranslation();
     const pluginActions = usePlugins((state: CombinedState) => state.plugins.components.taskActions.items, props);
     const {
         activeInference,
@@ -153,11 +155,11 @@ function TaskActionsComponent(props: Readonly<Props>): JSX.Element {
         const tasksToDelete = currentTasks.filter((task) => selectedIds.includes(task.id));
         Modal.confirm({
             title: isBulkMode ?
-                `Delete ${tasksToDelete.length} selected tasks` :
-                `The task ${taskInstance.id} will be deleted`,
+                t('deleteConfirm.tasksBulkTitle', { count: tasksToDelete.length }) :
+                t('deleteConfirm.taskTitle', { id: taskInstance.id }),
             content: isBulkMode ?
-                'All related data (images, annotations) for all selected tasks will be lost. Continue?' :
-                'All related data (images, annotations) will be lost. Continue?',
+                t('deleteConfirm.tasksBulkContent') :
+                t('deleteConfirm.taskContent'),
             className: 'cvat-modal-confirm-delete-task',
             onOk: () => {
                 dispatch(makeBulkOperationAsync(
@@ -172,7 +174,7 @@ function TaskActionsComponent(props: Readonly<Props>): JSX.Element {
                 type: 'primary',
                 danger: true,
             },
-            okText: isBulkMode ? 'Delete selected' : 'Delete',
+            okText: isBulkMode ? t('deleteConfirm.deleteSelected') : t('common.delete'),
         });
     }, [taskInstance, currentTasks, selectedIds, isBulkMode]);
 

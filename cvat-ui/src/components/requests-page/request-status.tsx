@@ -3,16 +3,19 @@
 // SPDX-License-Identifier: MIT
 
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import Text from 'antd/lib/typography/Text';
 import { BaseType } from 'antd/es/typography/Base';
 import LoadingOutlined from '@ant-design/icons/lib/icons/LoadingOutlined';
 import { RQStatus } from 'cvat-core-wrapper';
+import { translateRequestMessage } from 'utils/i18n-labels';
 
 function statusMessage(message: string, defaultMessage: string, postfix?: JSX.Element): JSX.Element {
+    const displayMessage = message ? translateRequestMessage(message) : defaultMessage;
     if (message) {
         return (
             <>
-                {message}
+                {displayMessage}
                 {postfix || null}
             </>
         );
@@ -33,6 +36,7 @@ export interface Props {
 }
 
 function StatusMessage(props: Props): JSX.Element {
+    const { t } = useTranslation();
     const { cancelled } = props;
     let { status, message } = props;
     message = message || '';
@@ -66,30 +70,30 @@ function StatusMessage(props: Props): JSX.Element {
         >
             {((): JSX.Element => {
                 if (cancelled || status === RQStatus.CANCELED) {
-                    return statusMessage(message, 'Cancelled');
+                    return statusMessage(message, t('requests.cancelled'));
                 }
 
                 if (status === RQStatus.FINISHED) {
-                    return statusMessage(message, 'Finished');
+                    return statusMessage(message, t('requests.finished'));
                 }
 
                 if ([RQStatus.QUEUED].includes(status)) {
-                    return statusMessage(message, 'Queued', <LoadingOutlined />);
+                    return statusMessage(message, t('requests.queued'), <LoadingOutlined />);
                 }
 
                 if ([RQStatus.STARTED].includes(status)) {
-                    return statusMessage(message, 'In progress', <LoadingOutlined />);
+                    return statusMessage(message, t('requests.inProgress'), <LoadingOutlined />);
                 }
 
                 if (status === RQStatus.FAILED) {
-                    return statusMessage(message, 'Failed');
+                    return statusMessage(message, t('requests.failed'));
                 }
 
                 if (status === RQStatus.UNKNOWN) {
-                    return statusMessage(message, 'Unknown status received');
+                    return statusMessage(message, t('requests.unknownStatus'));
                 }
 
-                return statusMessage(message, 'Unknown status received');
+                return statusMessage(message, t('requests.unknownStatus'));
             })()}
         </Text>
     );

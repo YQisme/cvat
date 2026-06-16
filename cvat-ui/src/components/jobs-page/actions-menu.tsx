@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: MIT
 
 import React, { useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { shallowEqual } from 'utils/redux';
 import Dropdown from 'antd/lib/dropdown';
@@ -42,6 +43,7 @@ function JobActionsComponent(
         onApplyFilter,
     } = props;
     const dispatch = useDispatch();
+    const { t } = useTranslation();
 
     const pluginActions = usePlugins((state: CombinedState) => state.plugins.components.jobActions.items, props);
     const {
@@ -104,11 +106,11 @@ function JobActionsComponent(
     const onDeleteJob = useCallback(() => {
         Modal.confirm({
             title: isBulkMode ?
-                `Delete ${jobsToAct.length} selected jobs` :
-                `The job ${jobInstance.id} will be deleted`,
+                t('deleteConfirm.jobsBulkTitle', { count: jobsToAct.length }) :
+                t('deleteConfirm.jobTitle', { id: jobInstance.id }),
             content: isBulkMode ?
-                'All related data (annotations) for all selected jobs will be lost. Continue?' :
-                'All related data (annotations) will be lost. Continue?',
+                t('deleteConfirm.jobsBulkContent') :
+                t('deleteConfirm.jobContent'),
             className: 'cvat-modal-confirm-delete-job',
             onOk: () => {
                 setTimeout(() => {
@@ -127,7 +129,7 @@ function JobActionsComponent(
                 type: 'primary',
                 danger: true,
             },
-            okText: isBulkMode ? 'Delete selected' : 'Delete',
+            okText: isBulkMode ? t('deleteConfirm.deleteSelected') : t('common.delete'),
         });
     }, [jobInstance, isBulkMode, jobsToAct, dispatch]);
 

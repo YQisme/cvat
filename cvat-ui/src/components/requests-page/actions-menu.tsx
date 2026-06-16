@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: MIT
 
 import React, { useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { shallowEqual } from 'utils/redux';
 import Dropdown from 'antd/lib/dropdown';
@@ -25,6 +26,7 @@ function RequestActionsComponent(props: Readonly<Props>): JSX.Element | null {
         dropdownTrigger,
     } = props;
     const dispatch = useDispatch();
+    const { t } = useTranslation();
     const {
         selectedIds,
         requestsMap,
@@ -86,7 +88,11 @@ function RequestActionsComponent(props: Readonly<Props>): JSX.Element | null {
             async (request) => {
                 await dispatch(cancelRequestAsync(request));
             },
-            (request, idx, total) => `Canceling request #${request.id} (${idx + 1}/${total})`,
+            (request, idx, total) => t('requests.cancelingRequest', {
+                id: request.id,
+                current: idx + 1,
+                total,
+            }),
         ));
     }, [requestsToAct]);
 
@@ -104,14 +110,14 @@ function RequestActionsComponent(props: Readonly<Props>): JSX.Element | null {
     if (downloadableCount > 0) {
         menuItems.push({
             key: 'download',
-            label: withCount('Download', downloadableCount),
+            label: withCount(t('requests.download'), downloadableCount),
             onClick: onDownload,
         });
     }
     if (queuedCount > 0) {
         menuItems.push({
             key: 'cancel',
-            label: withCount('Cancel', queuedCount),
+            label: withCount(t('requests.cancel'), queuedCount),
             onClick: onCancel,
         });
     }

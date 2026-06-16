@@ -145,6 +145,7 @@ interface Props {
 }
 
 function ItemTopComponent(props: Props): JSX.Element {
+    const { t } = useTranslation();
     const {
         clientID,
         serverID,

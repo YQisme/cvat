@@ -18,11 +18,15 @@ import React, {
     useState, useMemo,
     useCallback,
 } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ShortcutScope } from 'utils/enums';
 import { KeyMap } from 'utils/mousetrap-react';
 import { shortcutsActions } from 'actions/shortcuts-actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { CombinedState } from 'reducers';
+import {
+    translateShortcutDescription, translateShortcutName, translateShortcutScope,
+} from 'utils/i18n-labels';
 import MultipleShortcutsDisplay from './multiple-shortcuts-display';
 
 interface Props {
@@ -32,6 +36,7 @@ interface Props {
 
 function ShortcutsSettingsComponent(props: Props): JSX.Element {
     const { keyMap, onKeySequenceUpdate } = props;
+    const { t } = useTranslation();
     const [searchValue, setSearchValue] = useState('');
     const shortcuts = useSelector((state: CombinedState) => state.shortcuts);
     const [activeKeys, setActiveKeys] = useState<string[]>([]);
@@ -43,10 +48,10 @@ function ShortcutsSettingsComponent(props: Props): JSX.Element {
 
     const onRestoreDefaults = useCallback(() => {
         Modal.confirm({
-            title: 'Are you sure you want to restore defaults?',
-            okText: 'Yes',
+            title: t('settings.restoreDefaultsConfirm'),
+            okText: t('settings.yes'),
             className: 'cvat-shortcuts-settings-restore-modal',
-            cancelText: 'No',
+            cancelText: t('settings.no'),
             onOk: () => {
                 const currentSettings = localStorage.getItem('clientSettings');
                 dispatch(shortcutsActions.registerShortcuts({ ...shortcuts.defaultState }));
@@ -61,10 +66,12 @@ function ShortcutsSettingsComponent(props: Props): JSX.Element {
                 }
             },
         });
-    }, [shortcuts.defaultState]);
+    }, [shortcuts.defaultState, t]);
 
     const filteredKeyMap = useMemo(() => Object.entries(keyMap).filter(
-        ([, item]) => (
+        ([id, item]) => (
+            translateShortcutName(id, item.name).toLowerCase().includes(searchValue) ||
+            translateShortcutDescription(id, item.description).toLowerCase().includes(searchValue) ||
             item.name.toLowerCase().includes(searchValue) ||
             item.description.toLowerCase().includes(searchValue)
         ),
@@ -79,15 +86,12 @@ function ShortcutsSettingsComponent(props: Props): JSX.Element {
                 return null;
             }
 
-            let scopeTitle = scope.split('_').join(' ');
-            const firstAlphaIndex = scopeTitle.search(/[a-zA-Z]/);
-            if (firstAlphaIndex !== -1) {
-                scopeTitle = scopeTitle.slice(0, firstAlphaIndex) +
-                scopeTitle.charAt(firstAlphaIndex).toUpperCase() +
-                scopeTitle.slice(firstAlphaIndex + 1).toLowerCase();
-            }
             return {
-                label: <span className='cvat-shortcuts-settings-label'>{scopeTitle}</span>,
+                label: (
+                    <span className='cvat-shortcuts-settings-label'>
+                        {translateShortcutScope(scope)}
+                    </span>
+                ),
                 key: scope,
                 showArrow: !searchValue,
                 children: (
@@ -99,8 +103,16 @@ function ShortcutsSettingsComponent(props: Props): JSX.Element {
                             >
                                 <List.Item.Meta
                                     className={`${item.nonActive ? 'cvat-shortcuts-settings-item-non-active' : ''}`}
-                                    title={<p className='cvat-shortcuts-settings-item-title'>{item.name}</p>}
-                                    description={<span className='cvat-shortcuts-settings-item-description'>{item.description}</span>}
+                                    title={(
+                                        <p className='cvat-shortcuts-settings-item-title'>
+                                            {translateShortcutName(id, item.name)}
+                                        </p>
+                                    )}
+                                    description={(
+                                        <span className='cvat-shortcuts-settings-item-description'>
+                                            {translateShortcutDescription(id, item.description)}
+                                        </span>
+                                    )}
                                 />
                                 <MultipleShortcutsDisplay
                                     id={id}
@@ -121,7 +133,7 @@ function ShortcutsSettingsComponent(props: Props): JSX.Element {
         }
 
         return scopeItems;
-    }, [filteredKeyMap]);
+    }, [filteredKeyMap, keyMap, onKeySequenceUpdate, searchValue]);
 
     const handleCollapseChange = (keys: string[] | string): void => {
         if (!searchValue) {
@@ -136,18 +148,20 @@ function ShortcutsSettingsComponent(props: Props): JSX.Element {
                     <Flex gap={4}>
                         <Search
                             size='large'
-                            placeholder='Search for a shortcut here...'
+                            placeholder={t('settings.searchShortcut')}
                             allowClear
                             onChange={onSearchChange}
                             className='cvat-shortcuts-settings-search'
                         />
-                        <Button size='large' onClick={onRestoreDefaults} className='cvat-shortcuts-settings-restore'>Restore Defaults</Button>
+                        <Button size='large' onClick={onRestoreDefaults} className='cvat-shortcuts-settings-restore'>
+                            {t('settings.restoreDefaults')}
+                        </Button>
                     </Flex>
                 </Col>
             </Row>
             <Row className='cvat-shortcuts-setting'>
                 <Col span={24}>
-                    <Alert message='Shortcut may consist of any combination of modifiers (alt, ctrl, or shift) and one non-modifier at the end. Some key combinations may be reserved by the browser and cannot be overridden in CVAT.' type='warning' showIcon />
+                    <Alert message={t('settings.shortcutHintWarning')} type='warning' showIcon />
                     {items ? (
                         <Collapse
                             items={items}

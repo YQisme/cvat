@@ -12,6 +12,7 @@ import ObjectButtonsContainer from 'containers/annotation-page/standard-workspac
 import ItemDetailsContainer from 'containers/annotation-page/standard-workspace/objects-side-bar/object-item-details';
 import { ColorBy } from 'reducers';
 import { ObjectType, ShapeType } from 'cvat-core-wrapper';
+import { translateObjectType, translateShapeType } from 'utils/i18n-labels';
 import ObjectItemElementComponent from './object-item-element';
 import ItemBasics from './object-item-basics';
 
@@ -98,8 +99,8 @@ function ObjectItemComponent(props: Props): JSX.Element {
 
     const type =
         objectType === ObjectType.TAG ?
-            ObjectType.TAG.toUpperCase() :
-            `${shapeType.toUpperCase()} ${objectType.toUpperCase()}`;
+            translateObjectType(ObjectType.TAG).toUpperCase() :
+            `${translateShapeType(shapeType).toUpperCase()} ${translateObjectType(objectType).toUpperCase()}`;
 
     const className = !activated ?
         `cvat-objects-sidebar-state-item${zLayerDragging ? ' cvat-objects-sidebar-state-item-dragging' : ''}` :

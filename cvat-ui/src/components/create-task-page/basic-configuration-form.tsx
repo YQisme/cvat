@@ -9,6 +9,7 @@ import Text from 'antd/lib/typography/Text';
 import Tooltip from 'antd/lib/tooltip';
 import Form, { FormInstance } from 'antd/lib/form';
 import { QuestionCircleOutlined } from '@ant-design/icons';
+import i18n from 'i18n';
 
 export interface BaseConfiguration {
     name: string;
@@ -72,6 +73,7 @@ export default class BasicConfigurationForm extends React.PureComponent<Props> {
 
     public render(): JSX.Element {
         const { many, exampleMultiTaskName } = this.props;
+        const { t } = i18n;
 
         return (
             <Form ref={this.formRef} layout='vertical'>
@@ -79,11 +81,11 @@ export default class BasicConfigurationForm extends React.PureComponent<Props> {
                     className={many ? 'cvat-task-name-field-has-tooltip' : ''}
                     hasFeedback
                     name='name'
-                    label={<span>Name</span>}
+                    label={<span>{t('createTask.name')}</span>}
                     rules={[
                         {
                             required: true,
-                            message: 'Task name cannot be empty',
+                            message: t('createTask.nameRequired'),
                         },
                     ]}
                     initialValue={this.initialName}
@@ -97,32 +99,28 @@ export default class BasicConfigurationForm extends React.PureComponent<Props> {
                     <Text type='secondary'>
                         <Tooltip title={() => (
                             <>
-                                You can use in the template:
+                                {t('createTask.templateHintTitle')}
                                 <ul>
                                     <li>
-                                        some_text - any text
+                                        {t('createTask.templateAnyText')}
                                     </li>
                                     <li>
-                                        {'{{'}
-                                        index
-                                        {'}}'}
-                                        &nbsp;- index file in set
+                                        {'{{index}} '}
+                                        {t('createTask.templateIndexDesc')}
                                     </li>
                                     <li>
-                                        {'{{'}
-                                        file_name
-                                        {'}}'}
-                                        &nbsp;- name of file
+                                        {'{{file_name}} '}
+                                        {t('createTask.templateFileNameDesc')}
                                     </li>
                                 </ul>
-                                Example:&nbsp;
+                                {t('createTask.templateExample')}&nbsp;
                                 <i>
-                                    {exampleMultiTaskName || 'Task name 1 - video_1.mp4'}
+                                    {exampleMultiTaskName || t('createTask.templateExampleValue')}
                                 </i>
                             </>
                         )}
                         >
-                            When forming the name, a template is used.
+                            {t('createTask.templateUsedWhenNaming')}
                             {' '}
                             <QuestionCircleOutlined />
                         </Tooltip>

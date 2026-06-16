@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: MIT
 
 import React, { useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { shallowEqual } from 'utils/redux';
 import { useHistory } from 'react-router';
@@ -38,6 +39,7 @@ function ProjectActionsComponent(props: Readonly<Props>): JSX.Element {
 
     const history = useHistory();
     const dispatch = useDispatch();
+    const { t } = useTranslation();
     const pluginActions = usePlugins((state: CombinedState) => state.plugins.components.projectActions.items, props);
 
     const {
@@ -165,11 +167,11 @@ function ProjectActionsComponent(props: Readonly<Props>): JSX.Element {
         const projectsToDelete = currentProjects.filter((project) => selectedIds.includes(project.id));
         Modal.confirm({
             title: isBulkMode ?
-                `Delete ${projectsToDelete.length} selected projects` :
-                `The project ${projectInstance.id} will be deleted`,
+                t('deleteConfirm.projectsBulkTitle', { count: projectsToDelete.length }) :
+                t('deleteConfirm.projectTitle', { id: projectInstance.id }),
             content: isBulkMode ?
-                'All related data (images, annotations) for all selected projects will be lost. Continue?' :
-                'All related data (images, annotations) will be lost. Continue?',
+                t('deleteConfirm.projectsBulkContent') :
+                t('deleteConfirm.projectContent'),
             className: 'cvat-modal-confirm-remove-project',
             onOk: () => {
                 dispatch(makeBulkOperationAsync<Project>(
@@ -184,7 +186,7 @@ function ProjectActionsComponent(props: Readonly<Props>): JSX.Element {
                 type: 'primary',
                 danger: true,
             },
-            okText: isBulkMode ? 'Delete selected' : 'Delete',
+            okText: isBulkMode ? t('deleteConfirm.deleteSelected') : t('common.delete'),
         });
     }, [projectInstance, currentProjects, selectedIds, isBulkMode]);
     let menuItems;

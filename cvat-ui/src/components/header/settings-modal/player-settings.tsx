@@ -106,34 +106,34 @@ export default function PlayerSettingsComponent(props: Props): JSX.Element {
                         value={FrameSpeed.Fastest}
                         className='cvat-player-settings-speed-fastest'
                     >
-                        Fastest
+                        {t('settings.frameSpeed.fastest')}
                     </Select.Option>
                     <Select.Option key='fast' value={FrameSpeed.Fast} className='cvat-player-settings-speed-fast'>
-                        Fast
+                        {t('settings.frameSpeed.fast')}
                     </Select.Option>
                     <Select.Option
                         key='usual'
                         value={FrameSpeed.Usual}
                         className='cvat-player-settings-speed-usual'
                     >
-                        Usual
+                        {t('settings.frameSpeed.usual')}
                     </Select.Option>
                     <Select.Option key='slow' value={FrameSpeed.Slow} className='cvat-player-settings-speed-slow'>
-                        Slow
+                        {t('settings.frameSpeed.slow')}
                     </Select.Option>
                     <Select.Option
                         key='slower'
                         value={FrameSpeed.Slower}
                         className='cvat-player-settings-speed-slower'
                     >
-                        Slower
+                        {t('settings.frameSpeed.slower')}
                     </Select.Option>
                     <Select.Option
                         key='slowest'
                         value={FrameSpeed.Slowest}
                         className='cvat-player-settings-speed-slowest'
                     >
-                        Slowest
+                        {t('settings.frameSpeed.slowest')}
                     </Select.Option>
                 </Select>
             </Col>
@@ -158,7 +158,7 @@ export default function PlayerSettingsComponent(props: Props): JSX.Element {
                         className='cvat-select-canvas-background-color-button'
                         type='default'
                     >
-                        Select canvas background color
+                        {t('settings.selectCanvasBackgroundColor')}
                     </Button>
                 </Popover>
             </Col>
@@ -177,7 +177,7 @@ export default function PlayerSettingsComponent(props: Props): JSX.Element {
                                 onSwitchResetZoom(event.target.checked);
                             }}
                         >
-                            Reset zoom
+                            {t('settings.resetZoom')}
                         </Checkbox>
                     </Col>
                     <Col span={24}>
@@ -195,7 +195,7 @@ export default function PlayerSettingsComponent(props: Props): JSX.Element {
                                 onSwitchRotateAll(event.target.checked);
                             }}
                         >
-                            Rotate all images
+                            {t('settings.rotateAllImages')}
                         </Checkbox>
                     </Col>
                     <Col span={24}>
@@ -218,7 +218,7 @@ export default function PlayerSettingsComponent(props: Props): JSX.Element {
                                 onSwitchSmoothImage(event.target.checked);
                             }}
                         >
-                            Smooth image
+                            {t('settings.smoothImage')}
                         </Checkbox>
                     </Col>
                     <Col span={24}>
@@ -235,7 +235,7 @@ export default function PlayerSettingsComponent(props: Props): JSX.Element {
                             onSwitchShowingDeletedFrames(event.target.checked);
                         }}
                     >
-                        Show deleted frames
+                        {t('settings.showDeletedFrames')}
                     </Checkbox>
                 </Row>
                 <Row>

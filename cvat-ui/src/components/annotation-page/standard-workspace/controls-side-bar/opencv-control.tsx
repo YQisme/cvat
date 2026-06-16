@@ -284,7 +284,7 @@ class OpenCVControlComponent extends React.PureComponent<Props & DispatchToProps
         } catch (error: any) {
             notification.error({
                 description: error.toString(),
-                message: 'OpenCV.js processing error occurred',
+                message: i18n.t('annotation.opencv.processingError'),
                 className: 'cvat-notification-notice-opencv-processing-error',
             });
         }
@@ -330,7 +330,7 @@ class OpenCVControlComponent extends React.PureComponent<Props & DispatchToProps
         } catch (error: any) {
             notification.error({
                 description: error.toString(),
-                message: 'Could not initialize OpenCV library',
+                message: i18n.t('annotation.opencv.initError'),
             });
             this.setState({
                 initializationError: true,
@@ -425,7 +425,7 @@ class OpenCVControlComponent extends React.PureComponent<Props & DispatchToProps
                 <Row justify='center' align='middle' className='cvat-opencv-tracker-content'>
                     <Col>
                         <Text type='warning' className='cvat-text-color'>
-                            No available trackers found
+                            {i18n.t('annotation.opencv.noTrackersFound')}
                         </Text>
                     </Col>
                 </Row>
@@ -435,12 +435,12 @@ class OpenCVControlComponent extends React.PureComponent<Props & DispatchToProps
             <>
                 <Row justify='start'>
                     <Col className='cvat-opencv-tracker-help-message'>
-                        <Alert type='info' message='The tracker will be applied to drawn rectangles' />
+                        <Alert type='info' message={i18n.t('annotation.opencv.trackerHelp')} />
                     </Col>
                 </Row>
                 <Row justify='start'>
                     <Col>
-                        <Text className='cvat-text-color'>Tracker</Text>
+                        <Text className='cvat-text-color'>{i18n.t('annotation.opencv.tracker')}</Text>
                     </Col>
                 </Row>
                 <Row align='middle' justify='center'>
@@ -473,7 +473,7 @@ class OpenCVControlComponent extends React.PureComponent<Props & DispatchToProps
                                 }
                             }}
                         >
-                            Track
+                            {i18n.t('annotation.opencv.track')}
                         </Button>
                     </Col>
                 </Row>
@@ -489,7 +489,7 @@ class OpenCVControlComponent extends React.PureComponent<Props & DispatchToProps
                 <Row justify='start'>
                     <Col>
                         <Text className='cvat-text-color' strong>
-                            OpenCV
+                            {i18n.t('annotation.opencv.title')}
                         </Text>
                     </Col>
                 </Row>
@@ -498,17 +498,17 @@ class OpenCVControlComponent extends React.PureComponent<Props & DispatchToProps
                         tabBarGutter={8}
                         items={[{
                             key: 'drawing',
-                            label: 'Drawing',
+                            label: i18n.t('annotation.tools.drawing'),
                             children: this.renderDrawingContent(),
                             className: 'cvat-opencv-control-tabpane',
                         }, {
                             key: 'image',
-                            label: 'Image',
+                            label: i18n.t('annotation.tools.image'),
                             children: this.renderImageContent(),
                             className: 'cvat-opencv-control-tabpane',
                         }, {
                             key: 'tracking',
-                            label: 'Tracking',
+                            label: i18n.t('annotation.tools.tracking'),
                             children: this.renderTrackingContent(),
                             className: 'cvat-opencv-control-tabpane',
                         }]}
@@ -518,12 +518,12 @@ class OpenCVControlComponent extends React.PureComponent<Props & DispatchToProps
                         <Col>
                             {
                                 initializationProgress >= 0 ?
-                                    <Text>OpenCV is loading</Text> : (
+                                    <Text>{i18n.t('annotation.tooltips.opencvLoading')}</Text> : (
                                         <Button
                                             className='cvat-opencv-initialization-button'
                                             onClick={() => { this.initializeOpenCV(); }}
                                         >
-                                            Reload OpenCV
+                                            {i18n.t('annotation.opencv.reloadOpenCV')}
                                         </Button>
                                     )
                             }

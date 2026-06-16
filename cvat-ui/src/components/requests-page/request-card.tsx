@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: MIT
 
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
 
@@ -16,6 +17,7 @@ import { MenuProps } from 'antd/lib/menu';
 
 import { RQStatus, Request } from 'cvat-core-wrapper';
 import { useContextMenuClick } from 'utils/hooks';
+import { translateRequestOperationType } from 'utils/i18n-labels';
 
 import StatusMessage from './request-status';
 import RequestActionsComponent from './actions-menu';
@@ -48,24 +50,24 @@ function constructLink(request: Request): string | null {
     return null;
 }
 
-function constructName(operation: Request['operation']): string | null {
+function constructName(operation: Request['operation'], t: (key: string, options?: object) => string): string | null {
     const {
         target, jobID, taskID, projectID,
     } = operation;
 
     if (target === 'project' && projectID) {
-        return `Project #${projectID}`;
+        return t('requests.projectName', { id: projectID });
     }
     if (target === 'task' && taskID) {
-        return `Task #${taskID}`;
+        return t('requests.taskName', { id: taskID });
     }
     if (target === 'job' && jobID) {
-        return `Job #${jobID}`;
+        return t('requests.jobName', { id: jobID });
     }
     return null;
 }
 
-function constructTimestamps(request: Request): JSX.Element {
+function constructTimestamps(request: Request, t: (key: string, options?: object) => string): JSX.Element {
     const started = dayjs(request.startedDate).format('MMM Do YY, H:mm');
     const finished = dayjs(request.finishedDate).format('MMM Do YY, H:mm');
     const created = dayjs(request.createdDate).format('MMM Do YY, H:mm');
@@ -79,10 +81,12 @@ function constructTimestamps(request: Request): JSX.Element {
                 return (
                     <>
                         <Row>
-                            <Text type='secondary'>{`Started by ${request.owner.username} on ${started}`}</Text>
+                            <Text type='secondary'>
+                                {t('requests.startedByOn', { username: request.owner.username, date: started })}
+                            </Text>
                         </Row>
                         <Row>
-                            <Text type='secondary'>{`Expires on ${expired}`}</Text>
+                            <Text type='secondary'>{t('requests.expiresOn', { date: expired })}</Text>
                         </Row>
                     </>
                 );
@@ -90,10 +94,12 @@ function constructTimestamps(request: Request): JSX.Element {
             return (
                 <>
                     <Row>
-                        <Text type='secondary'>{`Started by ${request.owner.username} on ${started}`}</Text>
+                        <Text type='secondary'>
+                            {t('requests.startedByOn', { username: request.owner.username, date: started })}
+                        </Text>
                     </Row>
                     <Row>
-                        <Text type='secondary'>{`Finished on ${finished}`}</Text>
+                        <Text type='secondary'>{t('requests.finishedOn', { date: finished })}</Text>
                     </Row>
                 </>
             );
@@ -101,11 +107,15 @@ function constructTimestamps(request: Request): JSX.Element {
         case RQStatus.FAILED: {
             return (request.startedDate ? (
                 <Row>
-                    <Text type='secondary'>{`Started by ${request.owner.username} on ${started}`}</Text>
+                    <Text type='secondary'>
+                        {t('requests.startedByOn', { username: request.owner.username, date: started })}
+                    </Text>
                 </Row>
             ) : (
                 <Row>
-                    <Text type='secondary'>{`Enqueued by ${request.owner.username} on ${created}`}</Text>
+                    <Text type='secondary'>
+                        {t('requests.enqueuedByOn', { username: request.owner.username, date: created })}
+                    </Text>
                 </Row>
             ));
         }
@@ -113,10 +123,12 @@ function constructTimestamps(request: Request): JSX.Element {
             return (
                 <>
                     <Row>
-                        <Text type='secondary'>{`Enqueued by ${request.owner.username} on ${created}`}</Text>
+                        <Text type='secondary'>
+                            {t('requests.enqueuedByOn', { username: request.owner.username, date: created })}
+                        </Text>
                     </Row>
                     <Row>
-                        <Text type='secondary'>{`Started on ${started}`}</Text>
+                        <Text type='secondary'>{t('requests.startedOn', { date: started })}</Text>
                     </Row>
                 </>
             );
@@ -124,7 +136,9 @@ function constructTimestamps(request: Request): JSX.Element {
         default: {
             return (
                 <Row>
-                    <Text type='secondary'>{`Enqueued by ${request.owner.username} on ${created}`}</Text>
+                    <Text type='secondary'>
+                        {t('requests.enqueuedByOn', { username: request.owner.username, date: created })}
+                    </Text>
                 </Row>
             );
         }
@@ -144,15 +158,16 @@ function RequestCard(props: Readonly<Props>): JSX.Element {
     const {
         request, cancelled, selected, onClick,
     } = props;
+    const { t } = useTranslation();
     const { operation } = request;
     const { itemRef, handleContextMenuClick, handleContextMenuCapture } = useContextMenuClick<HTMLDivElement>();
     const { type } = operation;
 
     const linkToEntity = constructLink(request);
     const percent = request.status === RQStatus.FINISHED ? 100 : (request.progress ?? 0) * 100;
-    const timestamps = constructTimestamps(request);
+    const timestamps = constructTimestamps(request, t);
 
-    const name = constructName(operation);
+    const name = constructName(operation, t);
 
     const percentProgress = (request.status === RQStatus.FAILED || !percent) ? '' : `${percent.toFixed(2)}%`;
 
@@ -175,7 +190,7 @@ function RequestCard(props: Readonly<Props>): JSX.Element {
                     <Row style={{ paddingBottom: [RQStatus.FAILED].includes(request.status) ? '10px' : '0' }}>
                         <Col className='cvat-requests-type' {...dimensions}>
                             <Text>
-                                {type.split(':').map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+                                {translateRequestOperationType(type)}
                                 {' '}
                             </Text>
                         </Col>
@@ -227,7 +242,7 @@ function RequestCard(props: Readonly<Props>): JSX.Element {
                             {operation?.lightweight && (
                                 <Row>
                                     <Col className='cvat-lightweight-label'>
-                                        <Text type='secondary'>Lightweight backup</Text>
+                                        <Text type='secondary'>{t('requests.lightweightBackup')}</Text>
                                     </Col>
                                 </Row>
                             )}

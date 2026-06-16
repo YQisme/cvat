@@ -20,6 +20,7 @@ import patterns from 'utils/validation-patterns';
 import { isInteger } from 'utils/validation';
 import SourceStorageField from 'components/storage/source-storage-field';
 import TargetStorageField from 'components/storage/target-storage-field';
+import i18n from 'i18n';
 
 import {
     getCore, Storage, StorageData, StorageLocation,
@@ -91,7 +92,7 @@ interface Props {
 
 function validateURL(_: RuleObject, value: string): Promise<void> {
     if (value && !patterns.validateURL.pattern.test(value)) {
-        return Promise.reject(new Error('URL is not a valid URL'));
+        return Promise.reject(new Error(i18n.t('createTask.invalidUrl')));
     }
 
     return Promise.resolve();
@@ -103,7 +104,7 @@ const validateOverlapSize: RuleRender = ({ getFieldValue }): RuleObject => ({
             const segmentSize = getFieldValue('segmentSize');
             if (typeof segmentSize !== 'undefined' && segmentSize !== '') {
                 if (+segmentSize <= +value) {
-                    return Promise.reject(new Error('Segment size must be more than overlap size'));
+                    return Promise.reject(new Error(i18n.t('createTask.segmentSizeGtOverlap')));
                 }
             }
         }
@@ -118,7 +119,7 @@ const validateStopFrame: RuleRender = ({ getFieldValue }): RuleObject => ({
             const startFrame = getFieldValue('startFrame');
             if (typeof startFrame !== 'undefined' && startFrame !== '') {
                 if (+startFrame > +value) {
-                    return Promise.reject(new Error('Start frame must not be more than stop frame'));
+                    return Promise.reject(new Error(i18n.t('createTask.startFrameGtStop')));
                 }
             }
         }
@@ -191,14 +192,15 @@ class AdvancedConfigurationForm extends React.PureComponent<Props> {
     }
 
     private renderCopyDataCheckbox(): JSX.Element {
+        const { t } = i18n;
         return (
             <Form.Item
-                help='If you have a low data transfer rate over the network you can copy data into CVAT to speed up work'
+                help={t('createTask.copyDataHelp')}
                 name='copyData'
                 valuePropName='checked'
             >
                 <Checkbox>
-                    <Text className='cvat-text-color'>Copy data into CVAT</Text>
+                    <Text className='cvat-text-color'>{t('createTask.copyDataIntoCvat')}</Text>
                 </Checkbox>
             </Form.Item>
         );
@@ -206,43 +208,49 @@ class AdvancedConfigurationForm extends React.PureComponent<Props> {
 
     private renderSortingMethodRadio(): JSX.Element {
         const { onChangeSortingMethod } = this.props;
+        const { t } = i18n;
 
         return (
             <Form.Item
-                label='Sorting method'
+                label={t('createTask.sortingMethod')}
                 name='sortingMethod'
                 rules={[
                     {
                         required: true,
-                        message: 'The field is required.',
+                        message: t('createTask.fieldRequired'),
                     },
                 ]}
-                help='Specify how to sort images. It is not relevant for videos.'
+                help={t('createTask.sortingHelp')}
             >
                 <Radio.Group buttonStyle='solid' onChange={(e) => onChangeSortingMethod(e.target.value)}>
                     <Radio.Button value={SortingMethod.LEXICOGRAPHICAL} key={SortingMethod.LEXICOGRAPHICAL}>
-                        Lexicographical
+                        {t('createTask.sortingLexicographical')}
                     </Radio.Button>
-                    <Radio.Button value={SortingMethod.NATURAL} key={SortingMethod.NATURAL}>Natural</Radio.Button>
+                    <Radio.Button value={SortingMethod.NATURAL} key={SortingMethod.NATURAL}>
+                        {t('createTask.sortingNatural')}
+                    </Radio.Button>
                     <Radio.Button value={SortingMethod.PREDEFINED} key={SortingMethod.PREDEFINED}>
-                        Predefined
+                        {t('createTask.sortingPredefined')}
                     </Radio.Button>
-                    <Radio.Button value={SortingMethod.RANDOM} key={SortingMethod.RANDOM}>Random</Radio.Button>
+                    <Radio.Button value={SortingMethod.RANDOM} key={SortingMethod.RANDOM}>
+                        {t('createTask.sortingRandom')}
+                    </Radio.Button>
                 </Radio.Group>
             </Form.Item>
         );
     }
 
     private renderImageQuality(): JSX.Element {
+        const { t } = i18n;
         return (
-            <CVATTooltip title='Defines images compression level'>
+            <CVATTooltip title={t('createTask.imageQualityTooltip')}>
                 <Form.Item
-                    label='Image quality'
+                    label={t('createTask.imageQuality')}
                     name='imageQuality'
                     rules={[
                         {
                             required: true,
-                            message: 'The field is required.',
+                            message: t('createTask.fieldRequired'),
                         },
                         { validator: isInteger({ min: 5, max: 100 }) },
                     ]}
@@ -254,10 +262,11 @@ class AdvancedConfigurationForm extends React.PureComponent<Props> {
     }
 
     private renderOverlap(): JSX.Element {
+        const { t } = i18n;
         return (
-            <CVATTooltip title='Defines a number of intersected frames between different segments'>
+            <CVATTooltip title={t('createTask.overlapTooltip')}>
                 <Form.Item
-                    label='Overlap size'
+                    label={t('createTask.overlapSize')}
                     name='overlapSize'
                     dependencies={['segmentSize']}
                     rules={[{ validator: isInteger({ min: 0 }) }, validateOverlapSize]}
@@ -269,9 +278,10 @@ class AdvancedConfigurationForm extends React.PureComponent<Props> {
     }
 
     private renderSegmentSize(): JSX.Element {
+        const { t } = i18n;
         return (
-            <CVATTooltip title='Defines a number of frames in a segment'>
-                <Form.Item label='Segment size' name='segmentSize' rules={[{ validator: isInteger({ min: 1 }) }]}>
+            <CVATTooltip title={t('createTask.segmentSizeTooltip')}>
+                <Form.Item label={t('createTask.segmentSize')} name='segmentSize' rules={[{ validator: isInteger({ min: 1 }) }]}>
                     <Input size='large' type='number' min={1} />
                 </Form.Item>
             </CVATTooltip>
@@ -279,17 +289,19 @@ class AdvancedConfigurationForm extends React.PureComponent<Props> {
     }
 
     private renderStartFrame(): JSX.Element {
+        const { t } = i18n;
         return (
-            <Form.Item label='Start frame' name='startFrame' rules={[{ validator: isInteger({ min: 0 }) }]}>
+            <Form.Item label={t('createTask.startFrame')} name='startFrame' rules={[{ validator: isInteger({ min: 0 }) }]}>
                 <Input size='large' type='number' min={0} step={1} />
             </Form.Item>
         );
     }
 
     private renderStopFrame(): JSX.Element {
+        const { t } = i18n;
         return (
             <Form.Item
-                label='Stop frame'
+                label={t('createTask.stopFrame')}
                 name='stopFrame'
                 dependencies={['startFrame']}
                 rules={[{ validator: isInteger({ min: 0 }) }, validateStopFrame]}
@@ -300,20 +312,22 @@ class AdvancedConfigurationForm extends React.PureComponent<Props> {
     }
 
     private renderFrameStep(): JSX.Element {
+        const { t } = i18n;
         return (
-            <Form.Item label='Frame step' name='frameStep' rules={[{ validator: isInteger({ min: 1 }) }]}>
+            <Form.Item label={t('createTask.frameStep')} name='frameStep' rules={[{ validator: isInteger({ min: 1 }) }]}>
                 <Input size='large' type='number' min={1} step={1} />
             </Form.Item>
         );
     }
 
     private renderBugTracker(): JSX.Element {
+        const { t } = i18n;
         return (
             <Form.Item
                 hasFeedback
                 name='bugTracker'
-                label='Issue tracker'
-                extra='Attach issue tracker where the task is described'
+                label={t('createTask.issueTracker')}
+                extra={t('createTask.issueTrackerExtra')}
                 rules={[{ validator: validateURL }]}
             >
                 <Input size='large' />
@@ -322,6 +336,7 @@ class AdvancedConfigurationForm extends React.PureComponent<Props> {
     }
 
     private renderUzeZipChunks(): JSX.Element {
+        const { t } = i18n;
         return (
             <Space>
                 <Form.Item
@@ -331,8 +346,8 @@ class AdvancedConfigurationForm extends React.PureComponent<Props> {
                 >
                     <Switch />
                 </Form.Item>
-                <Text className='cvat-text-color'>Prefer zip chunks</Text>
-                <Tooltip title='ZIP chunks have better quality, but they require more disk space and time to download. Relevant for video only'>
+                <Text className='cvat-text-color'>{t('createTask.preferZipChunks')}</Text>
+                <Tooltip title={t('createTask.zipChunksTooltip')}>
                     <QuestionCircleOutlined style={{ opacity: 0.5 }} />
                 </Tooltip>
             </Space>
@@ -340,6 +355,7 @@ class AdvancedConfigurationForm extends React.PureComponent<Props> {
     }
 
     private renderCreateTaskMethod(): JSX.Element {
+        const { t } = i18n;
         return (
             <Space>
                 <Form.Item
@@ -349,8 +365,8 @@ class AdvancedConfigurationForm extends React.PureComponent<Props> {
                 >
                     <Switch defaultChecked />
                 </Form.Item>
-                <Text className='cvat-text-color'>Use cache</Text>
-                <Tooltip title='Using cache to store data.'>
+                <Text className='cvat-text-color'>{t('createTask.useCache')}</Text>
+                <Tooltip title={t('createTask.useCacheTooltip')}>
                     <QuestionCircleOutlined style={{ opacity: 0.5 }} />
                 </Tooltip>
             </Space>
@@ -358,26 +374,26 @@ class AdvancedConfigurationForm extends React.PureComponent<Props> {
     }
 
     private renderChunkSize(): JSX.Element {
+        const { t } = i18n;
         return (
             <CVATTooltip
                 title={(
                     <>
-                        Defines a number of frames to be packed in a chunk when send from client to server. Server
-                        defines automatically if empty.
+                        {t('createTask.chunkSizeTooltip')}
                         <br />
-                        Recommended values:
+                        {t('createTask.chunkSizeRecommended')}
                         <br />
-                        1080p or less: 36
+                        {t('createTask.chunkSize1080p')}
                         <br />
-                        2k or less: 8 - 16
+                        {t('createTask.chunkSize2k')}
                         <br />
-                        4k or less: 4 - 8
+                        {t('createTask.chunkSize4k')}
                         <br />
-                        More: 1 - 4
+                        {t('createTask.chunkSizeMore')}
                     </>
                 )}
             >
-                <Form.Item label='Chunk size' name='dataChunkSize' rules={[{ validator: isInteger({ min: 1 }) }]}>
+                <Form.Item label={t('createTask.chunkSize')} name='dataChunkSize' rules={[{ validator: isInteger({ min: 1 }) }]}>
                     <Input size='large' type='number' />
                 </Form.Item>
             </CVATTooltip>
@@ -385,9 +401,10 @@ class AdvancedConfigurationForm extends React.PureComponent<Props> {
     }
 
     private renderConsensusReplicas(): JSX.Element {
+        const { t } = i18n;
         return (
             <Form.Item
-                label='Consensus Replicas'
+                label={t('createTask.consensusReplicas')}
                 name='consensusReplicas'
                 rules={[
                     {
@@ -411,6 +428,7 @@ class AdvancedConfigurationForm extends React.PureComponent<Props> {
     }
 
     private renderSourceStorage(): JSX.Element {
+        const { t } = i18n;
         const {
             projectId,
             useProjectSourceStorage,
@@ -422,8 +440,8 @@ class AdvancedConfigurationForm extends React.PureComponent<Props> {
             <SourceStorageField
                 instanceId={projectId}
                 locationValue={sourceStorageLocation}
-                switchDescription='Use project source storage'
-                storageDescription='Specify source storage for import resources like annotation, backups'
+                switchDescription={t('createTask.useProjectSourceStorage')}
+                storageDescription={t('createTask.sourceStorageDescription')}
                 useDefaultStorage={useProjectSourceStorage}
                 onChangeUseDefaultStorage={onChangeUseProjectSourceStorage}
                 onChangeLocationValue={onChangeSourceStorageLocation}
@@ -432,6 +450,7 @@ class AdvancedConfigurationForm extends React.PureComponent<Props> {
     }
 
     private renderTargetStorage(): JSX.Element {
+        const { t } = i18n;
         const {
             projectId,
             useProjectTargetStorage,
@@ -443,8 +462,8 @@ class AdvancedConfigurationForm extends React.PureComponent<Props> {
             <TargetStorageField
                 instanceId={projectId}
                 locationValue={targetStorageLocation}
-                switchDescription='Use project target storage'
-                storageDescription='Specify target storage for export resources like annotation, backups                '
+                switchDescription={t('createTask.useProjectTargetStorage')}
+                storageDescription={t('createTask.targetStorageDescription')}
                 useDefaultStorage={useProjectTargetStorage}
                 onChangeUseDefaultStorage={onChangeUseProjectTargetStorage}
                 onChangeLocationValue={onChangeTargetStorageLocation}

@@ -3,11 +3,13 @@
 // SPDX-License-Identifier: MIT
 
 import React, { useRef, useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Select, Modal } from 'antd/lib';
 import { conflictDetector, unsetExistingShortcuts } from 'utils/conflict-detector';
 import { ShortcutScope } from 'utils/enums';
 import { KeyMapItem } from 'utils/mousetrap-react';
 import { getKeyfromCode, isModifier } from 'utils/key-code-mapper';
+import { translateShortcutName, translateShortcutScope } from 'utils/i18n-labels';
 
 interface Props {
     id: string;
@@ -23,6 +25,7 @@ function MultipleShortcutsDisplay(props: Props): JSX.Element {
         keyMap,
         onKeySequenceUpdate,
     } = props;
+    const { t } = useTranslation();
     const { sequences } = item;
     const selectRef = useRef<React.ElementRef<typeof Select>>(null);
     const [focus, setFocus] = useState(false);
@@ -42,24 +45,24 @@ function MultipleShortcutsDisplay(props: Props): JSX.Element {
         const conflictingShortcuts: Record<string, KeyMapItem> | null = conflictDetector(shortcut, keyMap);
         if (conflictingShortcuts) {
             Modal.confirm({
-                title: 'Conflicting shortcuts detected',
+                title: t('settings.conflictingShortcutsTitle'),
                 content: (
                     <p>
-                        Added sequence conflicts with the following shortcuts:
+                        {t('settings.conflictingShortcutsIntro')}
                         <br />
-                        {Object.values(conflictingShortcuts).map((conflictingShortcut: KeyMapItem, idx) => (
-                            <span key={`${idx} ${conflictingShortcut.name}`}>
-                                <strong>{conflictingShortcut.name}</strong>
+                        {Object.entries(conflictingShortcuts).map(([conflictId, conflictingShortcut]) => (
+                            <span key={`${conflictId} ${conflictingShortcut.name}`}>
+                                <strong>{translateShortcutName(conflictId, conflictingShortcut.name)}</strong>
                                 {' '}
-                                in the scope
+                                {t('settings.inTheScope')}
                                 {' '}
                                 <strong>
-                                    {ShortcutScope[conflictingShortcut.scope].split('_').join(' ')}
+                                    {translateShortcutScope(conflictingShortcut.scope)}
                                 </strong>
                                 <br />
                             </span>
                         ))}
-                        Would you like to unset the conflicting shortcuts?
+                        {t('settings.unsetConflictingShortcuts')}
                     </p>
                 ),
                 onOk: () => {
@@ -76,8 +79,8 @@ function MultipleShortcutsDisplay(props: Props): JSX.Element {
         const containsMoreThanOneNonModifierKey = pressedKeys.flat().filter((key) => !isModifier(key)).length > 1;
         if (containsMoreThanOneNonModifierKey) {
             Modal.error({
-                title: 'Invalid key combination',
-                content: 'Only one non-modifier key can be used in a combination',
+                title: t('settings.invalidKeyCombination'),
+                content: t('settings.invalidKeyCombinationContent'),
             });
             setPressedKeys([[]]);
             setCurrentIdx(0);
@@ -122,14 +125,8 @@ function MultipleShortcutsDisplay(props: Props): JSX.Element {
         const mappedKey = getKeyfromCode(event.code);
         if (!focus) return;
         if (!mappedKey) return;
-        // to allow shortcuts to be added with a gap, comment this line
 
         finalizeCombination();
-
-        // and uncomment the following lines
-
-        // const newTimer = setTimeout(finalizeCombination, 1000);
-        // setTimer(newTimer);
     };
 
     return (
@@ -153,7 +150,7 @@ function MultipleShortcutsDisplay(props: Props): JSX.Element {
             suffixIcon={null}
             dropdownStyle={{ display: 'none' }}
             mode='multiple'
-            placeholder='Register shortcut...'
+            placeholder={t('settings.registerShortcut')}
             value={sequences}
             className='cvat-shortcuts-settings-select'
             onKeyDown={handleKeyDown}

@@ -5,6 +5,7 @@
 
 import './styles.scss';
 import React, { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
     connect, useDispatch, useSelector,
 } from 'react-redux';
@@ -52,6 +53,7 @@ const initialValues: FormValues = {
 
 function ExportDatasetModal(props: Readonly<StateToProps>): JSX.Element {
     const { dumpers, instance } = props;
+    const { t } = useTranslation();
 
     const [instanceType, setInstanceType] = useState('');
     const [useDefaultTargetStorage, setUseDefaultTargetStorage] = useState(true);
@@ -147,7 +149,7 @@ function ExportDatasetModal(props: Readonly<StateToProps>): JSX.Element {
     useEffect(() => {
         const loc = defaultStorageLocation ? defaultStorageLocation.split('_')[0] : 'local';
         const cloudId = defaultStorageCloudId !== undefined && defaultStorageCloudId !== null ? `№${defaultStorageCloudId}` : '';
-        setHelpMessage(`Export to ${loc} storage ${cloudId}`);
+        setHelpMessage(t('exportModal.exportToStorage', { location: loc, cloudId }));
     }, [defaultStorageLocation, defaultStorageCloudId]);
 
     const closeModal = (): void => {
@@ -189,12 +191,15 @@ function ExportDatasetModal(props: Readonly<StateToProps>): JSX.Element {
                     ),
                 ));
                 closeModal();
-                const resource = values.saveImages ? 'Dataset' : 'Annotations';
-                const description =
-                    `Bulk ${resource.toLowerCase()} export was started. ` +
-                    'You can check progress and download the file [here](/requests).';
+                const resourceKey = values.saveImages ? 'dataset' : 'annotations';
+                const resource = t(`exportModal.${resourceKey}`);
+                const checkProgress = t('notifications.checkProgressHere');
+                const description = t('exportModal.bulkExportStartedDescription', {
+                    resource: resource.toLowerCase(),
+                    checkProgress,
+                });
                 Notification.info({
-                    message: `Bulk ${resource.toLowerCase()} export started`,
+                    message: t('exportModal.bulkExportStarted', { resource: resource.toLowerCase() }),
                     description: (
                         <CVATMarkdown history={history}>{description}</CVATMarkdown>
                     ),
@@ -217,11 +222,16 @@ function ExportDatasetModal(props: Readonly<StateToProps>): JSX.Element {
                 ),
             );
             closeModal();
-            const resource = values.saveImages ? 'Dataset' : 'Annotations';
-            const description = `${resource} export was started for ${instanceType}. ` +
-            'You can check progress and download the file [here](/requests).';
+            const resourceKey = values.saveImages ? 'dataset' : 'annotations';
+            const resource = t(`exportModal.${resourceKey}`);
+            const checkProgress = t('notifications.checkProgressHere');
+            const description = t('exportModal.exportStartedDescription', {
+                resource: resource.toLowerCase(),
+                instanceType: t(`exportModal.instanceTypes.${instanceType}`),
+                checkProgress,
+            });
             Notification.info({
-                message: `${resource} export started`,
+                message: t('exportModal.datasetExportStarted', { resource: resource.toLowerCase() }),
                 description: (
                     <CVATMarkdown history={history}>{description}</CVATMarkdown>
                 ),
@@ -259,10 +269,17 @@ function ExportDatasetModal(props: Readonly<StateToProps>): JSX.Element {
             title={
                 isBulkMode ? (
                     <Text strong>
-                        {`Export ${selectedInstances.length} ${instanceType}s as datasets`}
+                        {t('exportModal.exportBulkAsDatasets', {
+                            count: selectedInstances.length,
+                            instanceType: t(`exportModal.instanceTypes.${instanceType}`),
+                        })}
                     </Text>
                 ) : (
-                    <Text strong>{`Export ${instanceType} as a dataset`}</Text>
+                    <Text strong>
+                        {t('exportModal.exportAsDataset', {
+                            instanceType: t(`exportModal.instanceTypes.${instanceType}`),
+                        })}
+                    </Text>
                 )
             }
             open={!!instance}
@@ -280,10 +297,10 @@ function ExportDatasetModal(props: Readonly<StateToProps>): JSX.Element {
             >
                 <Form.Item
                     name='selectedFormat'
-                    label={<Text strong>Export format</Text>}
-                    rules={[{ required: true, message: 'Format must be selected' }]}
+                    label={<Text strong>{t('exportModal.exportFormat')}</Text>}
+                    rules={[{ required: true, message: t('exportModal.formatRequired') }]}
                 >
-                    <Select virtual={false} placeholder='Select dataset format' className='cvat-modal-export-select'>
+                    <Select virtual={false} placeholder={t('exportModal.selectFormat')} className='cvat-modal-export-select'>
                         {sortedDumpers
                             .filter(
                                 (dumper: Dumper): boolean => dumper.dimension === instance?.dimension ||
@@ -311,10 +328,10 @@ function ExportDatasetModal(props: Readonly<StateToProps>): JSX.Element {
                     >
                         <Switch className='cvat-modal-export-save-images' />
                     </Form.Item>
-                    <Text strong>Save images</Text>
+                    <Text strong>{t('exportModal.saveImages')}</Text>
                 </Space>
                 {isBulkMode ? (
-                    <Form.Item label={<Text strong>Name template</Text>} required>
+                    <Form.Item label={<Text strong>{t('exportModal.nameTemplate')}</Text>} required>
                         <Input
                             value={nameTemplate}
                             onChange={(e) => setNameTemplate(e.target.value)}
@@ -330,16 +347,16 @@ function ExportDatasetModal(props: Readonly<StateToProps>): JSX.Element {
                                     />
                                 )}
                             >
-                                When forming the dataset name, a template is used.
+                                {t('exportModal.nameTemplateHint')}
                                 {' '}
                                 <QuestionCircleOutlined />
                             </Tooltip>
                         </Text>
                     </Form.Item>
                 ) : (
-                    <Form.Item label={<Text strong>Custom name</Text>} name='customName'>
+                    <Form.Item label={<Text strong>{t('exportModal.customName')}</Text>} name='customName'>
                         <Input
-                            placeholder='Custom name for a dataset'
+                            placeholder={t('exportModal.customNamePlaceholder')}
                             suffix='.zip'
                             className='cvat-modal-export-filename-input'
                         />
@@ -347,10 +364,10 @@ function ExportDatasetModal(props: Readonly<StateToProps>): JSX.Element {
                 )}
                 <TargetStorageField
                     instanceId={instance ? instance.id : null}
-                    switchDescription='Use default settings'
+                    switchDescription={t('exportModal.useDefaultSettings')}
                     switchHelpMessage={helpMessage}
                     useDefaultStorage={isBulkMode ? false : useDefaultTargetStorage}
-                    storageDescription='Specify target storage for export dataset'
+                    storageDescription={t('exportModal.specifyTargetStorage')}
                     locationValue={targetStorage.location}
                     onChangeUseDefaultStorage={isBulkMode ? undefined : (value: boolean) => {
                         setUseDefaultTargetStorage(value);
