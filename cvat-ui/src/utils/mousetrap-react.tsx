@@ -73,10 +73,11 @@ Mousetrap.prototype.stopCallback = function (e: KeyboardEvent, element: Element,
         e?.preventDefault();
     }
 
-    // stop when modals are opened
+    // stop when modals are opened (check visibility, not inline style: closed antd modals
+    // stay in the DOM with an empty style.display while the wrap has display: none)
     const anyModalsOpened = Array.from(
         window.document.getElementsByClassName('ant-modal'),
-    ).some((el) => (el as HTMLElement).style.display !== 'none');
+    ).some((el) => (el as HTMLElement).offsetParent !== null);
 
     if (anyModalsOpened) {
         const modalClosingSequences = ['SWITCH_SHORTCUTS', 'SWITCH_SETTINGS']
